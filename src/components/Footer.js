@@ -24,15 +24,29 @@ const TopSection = styled.div`
   padding: 0 10%;
 `;
 
+const Section = styled.div`
+  text-align: center;
+  padding: 20px 50px 20px 50px;
+  margin: 0px 50px 0px 50px;
+`;
+
 const LogoImage = styled.img`
   width: 250px;
   height: auto;
 `;
 
-const InfoSection = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
+const TitleContent = styled.p`
+  margin: 0px 0px 10px 0px;
+  font-size: 20px;
+  font-family: 'SCDream7';
+  color: #000;
+`;
+
+const TextContent = styled.p`
+  margin: 0;
+  font-size: 18px;
+  font-family: 'SCDream4';
+  color: #000;
 `;
 
 const Divider = styled.div`
@@ -65,18 +79,22 @@ const FooterBar = () => {
     <FooterBarContainer>
       <TopSection>
         <LogoImage src={BuddyFriendsLogo} alt="BuddyFriends Logo" />
-        <InfoSection>
-          <FooterText>개인정보취급방침</FooterText>
-          <FooterText>이용약관</FooterText>
-          <FooterText>공지사항</FooterText>
-        </InfoSection>
-        <InfoSection>
-          <FooterText>고객센터</FooterText>
-          <FooterText>(ARS) 02-901-8000</FooterText>
-          <FooterText>평일 10:00-18:00 | 점심 13:00-14:00</FooterText>
-          <FooterText>토요일, 일요일, 공휴일 휴무</FooterText>
-          <FooterText>이메일: [email protected]</FooterText>
-        </InfoSection>
+        <Section>
+          <TitleContent>Delvelopers</TitleContent>
+          <TextContent>김다빈</TextContent>
+          <TextContent>류지예</TextContent>
+          <TextContent>여지원</TextContent>
+          <TextContent>오지연</TextContent>
+          <TextContent>정다교</TextContent>
+        </Section>
+        <Section>
+          <TitleContent>Contact</TitleContent>        
+          <TextContent>dabinsusan7@naver.com</TextContent>
+          <TextContent>devdaradara@gmail.com</TextContent>
+          <TextContent>yeojiwon0405@gmail.com</TextContent>
+          <TextContent>ohjy0530@gmail.com</TextContent>
+          <TextContent>hyunn0121@naver.com</TextContent>
+        </Section>
       </TopSection>
       <Divider />
       <SocialIcons>

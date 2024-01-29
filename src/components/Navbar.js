@@ -10,7 +10,7 @@ const NavContainer = styled.nav`
   padding: 0px 20px;
   background-color: #f6bd60;
   font-family: "SCDream5";
-  font-size: 20px;
+  font-size: 19px;
 `;
 
 const TextLink = styled(Link)`
@@ -23,7 +23,7 @@ const NavItems = styled.div`
 `;
 
 const NavPageItem = styled.div`
-  margin: 0 200px;
+  margin: 0 8rem;
   cursor: pointer;
   color: #000;
 `;
@@ -50,7 +50,7 @@ const Navber = () => {
             alt={"Logo"}
             style={{
               width: "auto",
-              height: "70px",
+              height: "60px",
               marginRight: "20px",
               marginTop: "5px",
             }}
