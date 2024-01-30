@@ -54,7 +54,7 @@ const TextContent = styled.p`
   margin: 0px 10px 0px 0px;
   font-size: 18px;
   font-family: "SCDream4";
-  color: #000;
+  color: #010C26;
 `;
 
 const TextLink = styled(Link)`
