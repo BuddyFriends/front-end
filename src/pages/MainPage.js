@@ -6,6 +6,7 @@ const MainContainer = styled.div`
   display: flex;
   align-items: center;
   padding: 100px;
+  margin-bottom: 20px;
 `;
 
 const ImageContainer = styled.div`
@@ -23,10 +24,10 @@ const TextContainer = styled.div`
   font-size: 32px; /* 글씨 크기 조절 */
   button {
     margin: 50px;
-    margin-left: 420px;
+    margin-left: 450px;
     background-color: #F6BD60;
     color: #ffffff;
-    font-size: 32px;
+    font-size: 24px;
     padding: 10px 20px; /* (상하 10px, 좌우 20px) */
     border: none;
     border-radius: 10px;
@@ -50,17 +51,28 @@ const Name = styled.div`
 
 const CareContainer = styled.div`
   text-align: center;
+  div{
+    display: flex;
+  }
+`;
+
+const Paw = styled.img`
+  width: 38px; /* 이미지의 크기 조절 */
+  height: 38px;
+  margin-left: 100px;
+  margin-right: 20px;
 `;
 
 const Title = styled.h1`
   font-size: 24px;
+  text-align: left;
 `;
 
 const Underline = styled.div`
   height: 2px;
-  width: 50px;
-  background-color: #333;
-  margin: 10px auto;
+  width: 1200px;
+  background-color: black;
+  margin-left: 100px;
 `;
 
 const Image2Container = styled.div`
@@ -105,6 +117,52 @@ const TextInCircle = styled.span`
   font-size: 24px;
 `;
 
+const ProfileContainer = styled.div`
+  display: flex;
+  justify-content: space-between;
+  margin: 20px 50px;
+  margin-bottom: 200px;
+`;
+
+const Profile = styled.div`
+  width: 330px; /* 상자의 너비 조절 */
+  height: 380px; /* 상자의 높이 조절 */
+  background-color: white; /* 상자의 배경색 지정 */
+  border-radius: 40px;
+  border: 2px solid #F6BD60;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+`;
+
+const Arrows = styled.img`
+  width: 20px;
+  height: 40px;
+  opacity: 0.7;
+  &:hover {
+    opacity: 1;
+  }
+  margin-top: 150px;
+`;
+
+const ProfileImage = styled.img`
+  width: 190px;
+  height: 190px;
+  border-radius: 50%;
+  margin-bottom: 20px;
+`;
+
+const PetName = styled.div`
+  font-size: 24px;
+  margin-bottom: 10px;
+`;
+
+const Date = styled.div`
+  font-size: 20px;
+  color: gray;
+`;
+
 function MainPage() {
   const navigate = useNavigate();
  
@@ -125,7 +183,7 @@ function MainPage() {
       </TextContainer>
     </MainContainer>
     <CareContainer>
-    <Title>Your Title</Title>
+    <div><Paw src="/images/paw.png" alt="paw"  /><Title>돌봄글 보러가기</Title></div>
     <Underline />
     <Image2Container>
       <CircleContainer>
@@ -140,6 +198,25 @@ function MainPage() {
         </OrangeCircle>
       </CircleContainer>
     </Image2Container>
+    <ProfileContainer>
+      <Arrows src="/images/left.png"  />
+      <Profile>
+      <ProfileImage src="/images/cat.png" alt="Profile 1" />
+          <PetName>이름</PetName>
+          <Date>날짜</Date>
+      </Profile>
+      <Profile>
+        <ProfileImage src="/images/cat.png" alt="Profile 1" />
+          <PetName>이름</PetName>
+          <Date>날짜</Date>
+      </Profile>
+      <Profile>
+      <ProfileImage src="/images/cat.png" alt="Profile 1" />
+          <PetName>이름</PetName>
+          <Date>날짜</Date>
+      </Profile>
+      <Arrows src="/images/right.png"  />
+    </ProfileContainer>
     </CareContainer>
     </div>
   );
