@@ -178,6 +178,10 @@ function MainPage() {
     navigate("/carepost");
   };
 
+  const navigateToCareDetailPage = () => {
+    navigate("/caredetail");
+  }
+
   const profilesData = [
     { imageSrc: '/images/cat.png', petName: '냥이1', date: '2022-02-01' },
     { imageSrc: '/images/cat.png', petName: '냥이2', date: '2022-02-02' },
@@ -211,9 +215,11 @@ function MainPage() {
         <Button onClick={navigateTocarepost}>돌봄신청</Button>
       </TextContainer>
     </MainContainer>
+
     <CareContainer>
     <Carediv><Paw src="/images/paw.png" alt="paw"  /><Title>돌봄글 보러가기</Title></Carediv>
     <Underline />
+
     <Image2Container>
       <CircleContainer>
         <CircleImage src="/images/dog.png" alt="dog" />
@@ -227,6 +233,7 @@ function MainPage() {
         </OrangeCircle>
       </CircleContainer>
     </Image2Container>
+    
     <ProfileContainer>
       <Arrows src="/images/left.png" onClick={handleLeftArrowClick} />
       {profilesData.slice(startIndex, startIndex + 3).map((profile, index) => (

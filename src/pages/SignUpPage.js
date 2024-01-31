@@ -200,6 +200,7 @@ function SignUpPage() {
         </TextContent>
         <TextLink to="/login">로그인</TextLink>
       </Text>
+      
       <Box>
         <form onSubmit={handleSubmit}>
           <InputWrapper>
