@@ -61,13 +61,21 @@ const Input = styled.input`
 
 const DateSelect=styled.div`
   display:flex;
-  a{
+`;
+
+const Inputa=styled.div`
     font-size: 20px;
     margin: 20px;
-  }
-  input{
+`;
+
+const InputDate=styled.input`
+    margin-bottom: 15px;
+    padding: 15px;
+    border: 3px solid #f6bd60;
+    border-radius: 10px;
+    font-size: 20px;
+    font-family: "SCDream4";
     width: 370px;
-  }
 `;
 
 
@@ -188,13 +196,13 @@ function CarePostPage() {
           <InputWrapper>
             <TextInput>돌봄 요청 기간</TextInput>
             <DateSelect>
-            <Input
+            <InputDate
               type="date"
               name="firstdate"
               value={formData.firstdate}
               onChange={handleChange}
-            /><a>~</a>
-            <Input
+            /><Inputa>~</Inputa>
+            <InputDate
               type="date"
               name="lastdate"
               value={formData.lastdate}
