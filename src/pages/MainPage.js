@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import { useNavigate } from "react-router-dom";
 
@@ -124,7 +124,7 @@ const ProfileContainer = styled.div`
   margin-bottom: 200px;
 `;
 
-const Profile = styled.div`
+const StyledProfile = styled.div`
   width: 330px; /* 상자의 너비 조절 */
   height: 380px; /* 상자의 높이 조절 */
   background-color: white; /* 상자의 배경색 지정 */
@@ -163,6 +163,14 @@ const Date = styled.div`
   color: gray;
 `;
 
+const Profile = ({ imageSrc, petName, date }) => (
+  <StyledProfile>
+    <ProfileImage src={imageSrc} alt="Profile" />
+    <PetName>{petName}</PetName>
+    <Date>{date}</Date>
+  </StyledProfile>
+);
+
 function MainPage() {
   const navigate = useNavigate();
  
@@ -170,8 +178,29 @@ function MainPage() {
     navigate("/carepost");
   };
 
+  const profilesData = [
+    { imageSrc: '/images/cat.png', petName: '냥이1', date: '2022-02-01' },
+    { imageSrc: '/images/cat.png', petName: '냥이2', date: '2022-02-02' },
+    { imageSrc: '/images/cat.png', petName: '냥이3', date: '2022-02-03' },
+    // ... add more profiles as needed
+  ];
+
+  const [startIndex, setStartIndex] = useState(0);
+
+  const handleLeftArrowClick = () => {
+    setStartIndex((prevIndex) => Math.max(prevIndex - 3, 0));
+  };
+
+  const handleRightArrowClick = () => {
+    setStartIndex((prevIndex) => Math.min(prevIndex + 3, profilesData.length - 1));
+  };
+
   return (
-    <div>
+    <div style={{
+      backgroundColor: '#f8edeb',
+      display:'flex',
+      flexDirection:'column',
+    }}>
     <MainContainer>
       <ImageContainer>
         <Image src="/images/maincat.png" alt="cat" />
@@ -199,23 +228,11 @@ function MainPage() {
       </CircleContainer>
     </Image2Container>
     <ProfileContainer>
-      <Arrows src="/images/left.png"  />
-      <Profile>
-      <ProfileImage src="/images/cat.png" alt="Profile 1" />
-          <PetName>이름</PetName>
-          <Date>날짜</Date>
-      </Profile>
-      <Profile>
-        <ProfileImage src="/images/cat.png" alt="Profile 1" />
-          <PetName>이름</PetName>
-          <Date>날짜</Date>
-      </Profile>
-      <Profile>
-      <ProfileImage src="/images/cat.png" alt="Profile 1" />
-          <PetName>이름</PetName>
-          <Date>날짜</Date>
-      </Profile>
-      <Arrows src="/images/right.png"  />
+      <Arrows src="/images/left.png" onClick={handleLeftArrowClick} />
+      {profilesData.slice(startIndex, startIndex + 3).map((profile, index) => (
+        <Profile key={index} {...profile} />
+      ))}
+      <Arrows src="/images/right.png" onClick={handleRightArrowClick} />
     </ProfileContainer>
     </CareContainer>
     </div>
