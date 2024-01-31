@@ -11,6 +11,7 @@ const PageContainer = styled.div`
   align-items: center;
   background-color: #f8edeb;
   flex-direction: column;
+  height: 70vh;
 `;
 
 const TitleText = styled.p`

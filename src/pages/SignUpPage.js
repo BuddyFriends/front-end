@@ -42,17 +42,6 @@ const Input = styled.input`
   font-family: "SCDream4";
 `;
 
-const Textarea = styled.textarea`
-  margin-bottom: 15px;
-  padding: 15px;
-  border: 3px solid #f6bd60;
-  border-radius: 10px;
-  width: 540px;
-  font-size: 20px;
-  font-family: 'SCDream4';
-  resize: none;
-`;
-
 const TextInput = styled.p`
   margin-bottom: 20px;
   font-size: 24px;
@@ -289,18 +278,20 @@ function SignUpPage() {
       </InputWrapper>
           <InputWrapper>
             <TextInput>한 줄 소개</TextInput>
-            <Textarea
+            <Input
               type="text"
               name="introduction"
+              placeholder="한 줄 소개를 입력해주세요."
               value={formData.introduction}
               onChange={handleChange}
             />
           </InputWrapper>
           <InputWrapper>
             <TextInput>오픈프로필 링크 입력</TextInput>
-            <Textarea
+            <Input
               type="text"
               name="introduction"
+              placeholder="카카오톡 오픈프로필 링크를 입력해주세요."
               value={formData.introduction}
               onChange={handleChange}
             />
