@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import { useNavigate } from "react-router-dom";
 
@@ -22,38 +22,37 @@ const Image = styled.img`
 
 const TextContainer = styled.div`
   font-size: 32px; /* 글씨 크기 조절 */
-  button {
-    margin: 50px;
-    margin-left: 450px;
-    background-color: #F6BD60;
-    color: #ffffff;
-    font-size: 24px;
-    padding: 10px 20px; /* (상하 10px, 좌우 20px) */
-    border: none;
-    border-radius: 10px;
-    &:hover {
-      background-color: #FF881A;
-    }
+`;
+
+const Button=styled.button`
+  margin: 50px;
+  margin-left: 450px;
+  background-color: #F6BD60;
+  color: #ffffff;
+  font-size: 24px;
+  padding: 10px 20px; /* (상하 10px, 좌우 20px) */
+  border: none;
+  border-radius: 10px;
+  &:hover {
+    background-color: #FF881A;
   }
 `;
 
 const Name = styled.div`
   font-size: 100px;
   margin-bottom: 50px;
-  strong {
-    div {
-      a1 {
-        padding-left: 250px;
-      }
-    }
-  }
+`;
+
+const Namea = styled.div`
+  padding-left: 250px;
 `;
 
 const CareContainer = styled.div`
   text-align: center;
-  div{
-    display: flex;
-  }
+`;
+
+const Carediv = styled.div`
+  display: flex;
 `;
 
 const Paw = styled.img`
@@ -61,10 +60,11 @@ const Paw = styled.img`
   height: 38px;
   margin-left: 100px;
   margin-right: 20px;
+  padding-top: 20px;
 `;
 
 const Title = styled.h1`
-  font-size: 24px;
+  font-size: 32px;
   text-align: left;
 `;
 
@@ -124,9 +124,7 @@ const ProfileContainer = styled.div`
   margin-bottom: 200px;
 `;
 
-
-
-const Profile = styled.div`
+const StyledProfile = styled.div`
   width: 330px; /* 상자의 너비 조절 */
   height: 380px; /* 상자의 높이 조절 */
   background-color: white; /* 상자의 배경색 지정 */
@@ -165,6 +163,14 @@ const Date = styled.div`
   color: gray;
 `;
 
+const Profile = ({ imageSrc, petName, date }) => (
+  <StyledProfile>
+    <ProfileImage src={imageSrc} alt="Profile" />
+    <PetName>{petName}</PetName>
+    <Date>{date}</Date>
+  </StyledProfile>
+);
+
 function MainPage() {
   const navigate = useNavigate();
  
@@ -176,21 +182,42 @@ function MainPage() {
     navigate("/caredetail");
   }
 
+  const profilesData = [
+    { imageSrc: '/images/cat.png', petName: '냥이1', date: '2022-02-01' },
+    { imageSrc: '/images/cat.png', petName: '냥이2', date: '2022-02-02' },
+    { imageSrc: '/images/cat.png', petName: '냥이3', date: '2022-02-03' },
+    // ... add more profiles as needed
+  ];
+
+  const [startIndex, setStartIndex] = useState(0);
+
+  const handleLeftArrowClick = () => {
+    setStartIndex((prevIndex) => Math.max(prevIndex - 3, 0));
+  };
+
+  const handleRightArrowClick = () => {
+    setStartIndex((prevIndex) => Math.min(prevIndex + 3, profilesData.length - 1));
+  };
+
   return (
-    <div>
+    <div style={{
+      backgroundColor: '#f8edeb',
+      display:'flex',
+      flexDirection:'column',
+    }}>
     <MainContainer>
       <ImageContainer>
         <Image src="/images/maincat.png" alt="cat" />
       </ImageContainer>
       <TextContainer>
-        <Name><strong><div>Buddy</div><div><a1>Friends</a1></div></strong></Name>
+        <Name><strong><div>Buddy</div><div><Namea>Friends</Namea></div></strong></Name>
         <div>소중한 반려동물, 이웃에게 잠깐 맡겨보세요.</div>
-        <button onClick={navigateTocarepost}>돌봄신청</button>
+        <Button onClick={navigateTocarepost}>돌봄신청</Button>
       </TextContainer>
     </MainContainer>
 
     <CareContainer>
-    <div><Paw src="/images/paw.png" alt="paw"  /><Title>돌봄글 보러가기</Title></div>
+    <Carediv><Paw src="/images/paw.png" alt="paw"  /><Title>돌봄글 보러가기</Title></Carediv>
     <Underline />
 
     <Image2Container>
@@ -208,25 +235,11 @@ function MainPage() {
     </Image2Container>
     
     <ProfileContainer>
-      <Arrows src="/images/left.png"  />
-
-      <Profile>
-      <ProfileImage src="/images/cat.png" alt="Profile 1" onClick={navigateToCareDetailPage}/>
-          <PetName>이름</PetName>
-          <Date>날짜</Date>
-      </Profile>
-
-      <Profile>
-        <ProfileImage src="/images/cat.png" alt="Profile 1" />
-          <PetName>이름</PetName>
-          <Date>날짜</Date>
-      </Profile>
-      <Profile>
-      <ProfileImage src="/images/cat.png" alt="Profile 1" />
-          <PetName>이름</PetName>
-          <Date>날짜</Date>
-      </Profile>
-      <Arrows src="/images/right.png"  />
+      <Arrows src="/images/left.png" onClick={handleLeftArrowClick} />
+      {profilesData.slice(startIndex, startIndex + 3).map((profile, index) => (
+        <Profile key={index} {...profile} />
+      ))}
+      <Arrows src="/images/right.png" onClick={handleRightArrowClick} />
     </ProfileContainer>
     </CareContainer>
     </div>
