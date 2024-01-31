@@ -163,6 +163,8 @@ const Date = styled.div`
   color: gray;
 `;
 
+// 프로필 카드 클릭 시 게시글 확인 페이지로 이동하기 위해 수정
+/*
 const Profile = ({ imageSrc, petName, date }) => (
   <StyledProfile>
     <ProfileImage src={imageSrc} alt="Profile" />
@@ -170,6 +172,23 @@ const Profile = ({ imageSrc, petName, date }) => (
     <Date>{date}</Date>
   </StyledProfile>
 );
+*/
+
+const Profile = ({ imageSrc, petName, date }) => {
+  const navigate = useNavigate();
+
+  const handleProfileClick = () => {
+    navigate('/caredetail');
+  };
+
+  return (
+    <StyledProfile onClick={handleProfileClick}>
+      <ProfileImage src={imageSrc} alt="Profile" />
+      <PetName>{petName}</PetName>
+      <Date>{date}</Date>
+    </StyledProfile>
+  );
+};
 
 function MainPage() {
   const navigate = useNavigate();
