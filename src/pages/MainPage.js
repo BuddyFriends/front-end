@@ -22,38 +22,37 @@ const Image = styled.img`
 
 const TextContainer = styled.div`
   font-size: 32px; /* 글씨 크기 조절 */
-  button {
-    margin: 50px;
-    margin-left: 450px;
-    background-color: #F6BD60;
-    color: #ffffff;
-    font-size: 24px;
-    padding: 10px 20px; /* (상하 10px, 좌우 20px) */
-    border: none;
-    border-radius: 10px;
-    &:hover {
-      background-color: #FF881A;
-    }
+`;
+
+const Button=styled.button`
+  margin: 50px;
+  margin-left: 450px;
+  background-color: #F6BD60;
+  color: #ffffff;
+  font-size: 24px;
+  padding: 10px 20px; /* (상하 10px, 좌우 20px) */
+  border: none;
+  border-radius: 10px;
+  &:hover {
+    background-color: #FF881A;
   }
 `;
 
 const Name = styled.div`
   font-size: 100px;
   margin-bottom: 50px;
-  strong {
-    div {
-      a1 {
-        padding-left: 250px;
-      }
-    }
-  }
+`;
+
+const Namea = styled.div`
+  padding-left: 250px;
 `;
 
 const CareContainer = styled.div`
   text-align: center;
-  div{
-    display: flex;
-  }
+`;
+
+const Carediv = styled.div`
+  display: flex;
 `;
 
 const Paw = styled.img`
@@ -61,10 +60,11 @@ const Paw = styled.img`
   height: 38px;
   margin-left: 100px;
   margin-right: 20px;
+  padding-top: 20px;
 `;
 
 const Title = styled.h1`
-  font-size: 24px;
+  font-size: 32px;
   text-align: left;
 `;
 
@@ -206,13 +206,13 @@ function MainPage() {
         <Image src="/images/maincat.png" alt="cat" />
       </ImageContainer>
       <TextContainer>
-        <Name><strong><div>Buddy</div><div><a1>Friends</a1></div></strong></Name>
+        <Name><strong><div>Buddy</div><div><Namea>Friends</Namea></div></strong></Name>
         <div>소중한 반려동물, 이웃에게 잠깐 맡겨보세요.</div>
-        <button onClick={navigateTocarepost}>돌봄신청</button>
+        <Button onClick={navigateTocarepost}>돌봄신청</Button>
       </TextContainer>
     </MainContainer>
     <CareContainer>
-    <div><Paw src="/images/paw.png" alt="paw"  /><Title>돌봄글 보러가기</Title></div>
+    <Carediv><Paw src="/images/paw.png" alt="paw"  /><Title>돌봄글 보러가기</Title></Carediv>
     <Underline />
     <Image2Container>
       <CircleContainer>
