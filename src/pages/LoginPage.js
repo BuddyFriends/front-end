@@ -86,9 +86,9 @@ const Login = () => {
       );
 
       localStorage.setItem("userInfo", JSON.stringify(response.data.data));
-
       navigate("/");
       window.location.reload();
+      console.log("success")
     } catch (error) {
       console.error("Login failed:", error.message);
     }

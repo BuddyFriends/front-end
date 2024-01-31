@@ -1,8 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 import styled from "styled-components";
-import { Link } from "react-router-dom";
-import axios from 'axios';
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import axios from "axios";
 
 const PageContainer = styled.div`
   padding: 50px;
@@ -16,8 +15,8 @@ const PageContainer = styled.div`
 const TitleText = styled.p`
   margin: 0px 0px 50px 0px;
   font-size: 64px;
-  font-family: 'SCDream7';
-  color: #FF881A;
+  font-family: "SCDream7";
+  color: #ff881a;
 `;
 
 const Box = styled.div`
@@ -45,21 +44,21 @@ const Input = styled.input`
 const TextInput = styled.p`
   margin-bottom: 20px;
   font-size: 24px;
-  font-family: 'SCDream5';
-  color: #010C26;
+  font-family: "SCDream5";
+  color: #010c26;
 `;
 
 const TextStudy = styled.p`
   margin: 0px 0px 0px 0px;
   font-size: 32px;
-  font-family: 'SCDream7';
-  color: #010C26;
+  font-family: "SCDream7";
+  color: #010c26;
 `;
 
 const HorizontalLine = styled.div`
   width: 540px;
   height: 2px;
-  background-color: #010C26;
+  background-color: #010c26;
   margin: 0px 0px 0px 0px;
 `;
 
@@ -70,9 +69,9 @@ const Button = styled.button`
   height: 50px;
   border: none;
   border-radius: 10px;
-  background-color: #F6BD60;
+  background-color: #f6bd60;
   box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-  font-family: 'SCDream7';
+  font-family: "SCDream7";
   color: white;
   font-size: 26px;
   cursor: pointer;
@@ -82,7 +81,7 @@ const TextContent = styled.p`
   margin: 0px 10px 0px 0px;
   font-size: 18px;
   font-family: "SCDream4";
-  color: #010C26;
+  color: #010c26;
 `;
 
 const TextLink = styled(Link)`
@@ -104,76 +103,91 @@ const RowWrapper = styled.div`
 `;
 
 const GenderButton = styled.button`
-padding: 10px 20px;
-margin-right: 10px; 
-border: 3px solid #F6BD60;
-border-radius: 10px;
-background-color: ${props => props.isSelected ? '#F6BD60' : '#FFF'};
-color: ${props => props.isSelected ? 'white' : '#F6BD60'};
-font-family: 'SCDream6';
-font-size: 16px;
-cursor: pointer;
-outline: none;
-width: 280px;
-&:last-child {
-  margin-right: 0;
-}
+  type: button;
+  padding: 10px 20px;
+  margin-right: 10px;
+  border: 3px solid #f6bd60;
+  border-radius: 10px;
+  background-color: ${(props) => (props.isSelected ? "#F6BD60" : "#FFF")};
+  color: ${(props) => (props.isSelected ? "white" : "#F6BD60")};
+  font-family: "SCDream6";
+  font-size: 16px;
+  cursor: pointer;
+  outline: none;
+  width: 280px;
+  &:last-child {
+    margin-right: 0;
+  }
 `;
 
 function SignUpPage() {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
-    loginId: "",
+    userId: "",
+    userName: "",
     password: "",
-    name: "",
+    nickName: "",
+    address: "",
+    sex: "",
     age: "",
-    email: "",
-    phoneNum: "",
-    introduction: "",
+    intro: "",
+    chat: "",
   });
 
-  const [selectedGender, setSelectedGender] = useState('');
-
-  const handleGenderSelect = (gender) => {
-    setSelectedGender(gender);
-    setFormData({
-      ...formData,
-      gender: gender,
-    });
-  };
+  const [selectedGender, setSelectedGender] = useState("");
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData({
-      ...formData,
+    setFormData((prevState) => ({
+      ...prevState,
       [name]: value,
-    });
+    }));
+  };
+
+  const handleGenderSelect = (gender, e) => {
+    e.preventDefault(); 
+    setSelectedGender(gender);
+    setFormData((prevState) => ({
+      ...prevState,
+      sex: gender === "male"
+    }));
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const url = 'http://localhost:8080/api/user/join';
+    const payload = {
+      userId: formData.userId,
+      userName: formData.userName,
+      password: formData.password,
+      nickName: formData.nickName,
+      address: formData.address,
+      sex: formData.sex === "male",
+      age: parseInt(formData.age, 10),
+      intro: formData.intro,
+      chat: formData.chat,
+      smell: 0,
+      grade: "마스터",
+    };
 
-    const form = new FormData();
-    form.append('info', JSON.stringify(formData));
+    const url = "http://localhost:8080/api/user/join";
 
     try {
-      const response = await axios.post(url, form, {
+      const response = await axios.post(url, payload, {
         headers: {
-          'Content-Type': 'multipart/form-data',
+          "Content-Type": "application/json",
         },
       });
 
       if (response.status === 200) {
-        
-        localStorage.setItem('userInfo', JSON.stringify(response.data.data));
-        navigate('/');
+        console.log("Signup success:", response.data);
+        localStorage.setItem("userInfo", JSON.stringify(response.data));
+        navigate("/");
       } else {
-        console.error('Signup failed');
+        console.error("Signup failed:", response.status);
       }
     } catch (error) {
-      console.error('Error during signup:', error);
+      console.error("Error during signup:", error);
     }
   };
 
@@ -181,7 +195,9 @@ function SignUpPage() {
     <PageContainer>
       <TitleText>Sign Up</TitleText>
       <Text>
-        <TextContent>이미  <TextLink to="/">Buddy Friends</TextLink> 회원이신가요?</TextContent>
+        <TextContent>
+          이미 <TextLink to="/">Buddy Friends</TextLink> 회원이신가요?
+        </TextContent>
         <TextLink to="/login">로그인</TextLink>
       </Text>
       <Box>
@@ -190,17 +206,17 @@ function SignUpPage() {
             <TextInput>이름</TextInput>
             <Input
               type="text"
-              name="loginId"
+              name="userName"
               placeholder="당신의 성함을 적어주세요."
-              value={formData.loginId}
+              value={formData.userName}
               onChange={handleChange}
             />
             <TextInput>아이디</TextInput>
             <Input
               type="text"
-              name="loginId"
+              name="userId"
               placeholder="아이디를 입력해주세요."
-              value={formData.loginId}
+              value={formData.userId}
               onChange={handleChange}
             />
           </InputWrapper>
@@ -222,9 +238,9 @@ function SignUpPage() {
             <TextInput>닉네임</TextInput>
             <Input
               type="text"
-              name="name"
+              name="nickName"
               placeholder="닉네임을 입력해주세요."
-              value={formData.name}
+              value={formData.nickName}
               onChange={handleChange}
             />
           </InputWrapper>
@@ -232,57 +248,59 @@ function SignUpPage() {
             <TextInput>거주지</TextInput>
             <Input
               type="text"
-              name="age"
+              name="address"
               placeholder=""
-              value={formData.age}
+              value={formData.agaddresse}
               onChange={handleChange}
             />
           </InputWrapper>
-    <InputWrapper>
-      <TextInput>성별</TextInput>
-      <GenderButton
-        isSelected={selectedGender === 'male'}
-        onClick={() => setSelectedGender('male')}
-      >
-        남성
-      </GenderButton>
-      <GenderButton
-        isSelected={selectedGender === 'female'}
-        onClick={() => setSelectedGender('female')}
-      >
-        여성
-      </GenderButton>
-    </InputWrapper>
-      <InputWrapper>
-        <TextInput>나이대</TextInput>
-        <select
-          name="ageRange"
-          value={formData.ageRange}
-          onChange={handleChange}
-          style={{
-            padding: '10px',
-            border: '3px solid #f6bd60',
-            borderRadius: '10px',
-            width: '575px',
-            fontSize: '20px',
-            fontFamily: 'SCDream4',
-          }}
-        >
-          <option value="10s">10대</option>
-          <option value="20s">20대</option>
-          <option value="30s">30대</option>
-          <option value="30s">40대</option>
-          <option value="30s">50대</option>
-          <option value="30s">60대 이상</option>
-        </select>
-      </InputWrapper>
+          <InputWrapper>
+            <TextInput>성별</TextInput>
+            <RowWrapper>
+              <GenderButton
+                isSelected={selectedGender === "male"}
+                onClick={(e) => handleGenderSelect("male", e)}
+              >
+                남성
+              </GenderButton>
+              <GenderButton
+                isSelected={selectedGender === "female"}
+                onClick={(e) => handleGenderSelect("female", e)}
+              >
+                여성
+              </GenderButton>
+            </RowWrapper>
+          </InputWrapper>
+          <InputWrapper>
+            <TextInput>나이대</TextInput>
+            <select
+              name="age"
+              value={formData.age}
+              onChange={handleChange}
+              style={{
+                padding: "10px",
+                border: "3px solid #f6bd60",
+                borderRadius: "10px",
+                width: "575px",
+                fontSize: "20px",
+                fontFamily: "SCDream4",
+              }}
+            >
+              <option value="10">10대</option>
+              <option value="20">20대</option>
+              <option value="30">30대</option>
+              <option value="40">40대</option>
+              <option value="50">50대</option>
+              <option value="60">60대 이상</option>
+            </select>
+          </InputWrapper>
           <InputWrapper>
             <TextInput>한 줄 소개</TextInput>
             <Input
               type="text"
-              name="introduction"
+              name="intro"
               placeholder="한 줄 소개를 입력해주세요."
-              value={formData.introduction}
+              value={formData.intro}
               onChange={handleChange}
             />
           </InputWrapper>
@@ -290,9 +308,9 @@ function SignUpPage() {
             <TextInput>오픈프로필 링크 입력</TextInput>
             <Input
               type="text"
-              name="introduction"
+              name="chat"
               placeholder="카카오톡 오픈프로필 링크를 입력해주세요."
-              value={formData.introduction}
+              value={formData.chat}
               onChange={handleChange}
             />
           </InputWrapper>
@@ -300,7 +318,7 @@ function SignUpPage() {
         </form>
       </Box>
     </PageContainer>
-  )
+  );
 }
 
-export default SignUpPage
+export default SignUpPage;
