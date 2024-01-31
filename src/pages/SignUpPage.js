@@ -195,6 +195,7 @@ function SignUpPage() {
         <TextContent>이미  <TextLink to="/">Buddy Friends</TextLink> 회원이신가요?</TextContent>
         <TextLink to="/login">로그인</TextLink>
       </Text>
+      
       <Box>
         <form onSubmit={handleSubmit}>
           <InputWrapper>

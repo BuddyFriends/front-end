@@ -124,6 +124,8 @@ const ProfileContainer = styled.div`
   margin-bottom: 200px;
 `;
 
+
+
 const Profile = styled.div`
   width: 330px; /* 상자의 너비 조절 */
   height: 380px; /* 상자의 높이 조절 */
@@ -170,6 +172,10 @@ function MainPage() {
     navigate("/carepost");
   };
 
+  const navigateToCareDetailPage = () => {
+    navigate("/caredetail");
+  }
+
   return (
     <div>
     <MainContainer>
@@ -182,9 +188,11 @@ function MainPage() {
         <button onClick={navigateTocarepost}>돌봄신청</button>
       </TextContainer>
     </MainContainer>
+
     <CareContainer>
     <div><Paw src="/images/paw.png" alt="paw"  /><Title>돌봄글 보러가기</Title></div>
     <Underline />
+
     <Image2Container>
       <CircleContainer>
         <CircleImage src="/images/dog.png" alt="dog" />
@@ -198,13 +206,16 @@ function MainPage() {
         </OrangeCircle>
       </CircleContainer>
     </Image2Container>
+    
     <ProfileContainer>
       <Arrows src="/images/left.png"  />
+
       <Profile>
-      <ProfileImage src="/images/cat.png" alt="Profile 1" />
+      <ProfileImage src="/images/cat.png" alt="Profile 1" onClick={navigateToCareDetailPage}/>
           <PetName>이름</PetName>
           <Date>날짜</Date>
       </Profile>
+
       <Profile>
         <ProfileImage src="/images/cat.png" alt="Profile 1" />
           <PetName>이름</PetName>
