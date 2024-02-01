@@ -6,7 +6,7 @@ import axios from "axios";
 const PageContainer = styled.div`
   padding: 50px;
   display: flex;
-  justify-content: center;
+  justify-content: center; 
   align-items: center;
   background-color: #f8edeb;
   flex-direction: column;
@@ -108,8 +108,8 @@ const GenderButton = styled.button`
   margin-right: 10px;
   border: 3px solid #f6bd60;
   border-radius: 10px;
-  background-color: ${(props) => (props.isSelected ? "#F6BD60" : "#FFF")};
-  color: ${(props) => (props.isSelected ? "white" : "#F6BD60")};
+  background-color: ${props => props.isSelected ? '#F6BD60' : '#FFF'};
+  color: ${props => props.isSelected ? 'white' : '#F6BD60'};
   font-family: "SCDream6";
   font-size: 16px;
   cursor: pointer;
@@ -182,7 +182,7 @@ function SignUpPage() {
       if (response.status === 200) {
         console.log("Signup success:", response.data);
         localStorage.setItem("userInfo", JSON.stringify(response.data));
-        navigate("/");
+        navigate("/login");
       } else {
         console.error("Signup failed:", response.status);
       }

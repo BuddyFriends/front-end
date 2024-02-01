@@ -35,10 +35,20 @@ const NavItem = styled.div`
 `;
 
 const Navber = () => {
-  const [userInfo, setUserInfo] = useState("사용자1");
+  const [userInfo, setUserInfo] =  useState(() => {
+    const storedUserInfo = localStorage.getItem('userInfo');
+    return storedUserInfo && storedUserInfo !== 'undefined' ? JSON.parse(storedUserInfo) : null;
+  });
+  console.log(userInfo)
 
-  const handleLogout = () => {
-    setUserInfo(null);
+  const handleLogout = async () => {
+    try {
+      // 로그인 정보를 localStorage에서 삭제
+      localStorage.removeItem('userInfo');
+      setUserInfo(null);
+    } catch (error) {
+      console.error('Login failed:', error.message);
+    }
   };
 
   return (
@@ -70,7 +80,7 @@ const Navber = () => {
         {userInfo !== null ? (
           <>
             <TextLink to="/mypage">
-              <NavItem>{userInfo}</NavItem>
+              <NavItem>{userInfo.userName}</NavItem>
             </TextLink>
             <NavItem onClick={handleLogout}>LogOut</NavItem>
           </>

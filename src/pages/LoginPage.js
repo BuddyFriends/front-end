@@ -72,7 +72,7 @@ const Text = styled.div`
 
 const Login = () => {
   const navigate = useNavigate();
-  const [loginId, setLoginId] = useState("");
+  const [userId, setUserId] = useState("");
   const [password, setPassword] = useState("");
 
   const handleLogin = async () => {
@@ -80,15 +80,15 @@ const Login = () => {
       const response = await axios.post(
         "http://localhost:8080/api/user/login",
         {
-          loginId,
+          userId,
           password,
         }
       );
 
-      localStorage.setItem("userInfo", JSON.stringify(response.data.data));
+      localStorage.setItem("userInfo", JSON.stringify(response.data));
+
       navigate("/");
       window.location.reload();
-      console.log("success")
     } catch (error) {
       console.error("Login failed:", error.message);
     }
@@ -101,8 +101,8 @@ const Login = () => {
         <Input
           type="text"
           placeholder="ID"
-          value={loginId}
-          onChange={(e) => setLoginId(e.target.value)}
+          value={userId}
+          onChange={(e) => setUserId(e.target.value)}
         />
       </InputWrapper>
       <InputWrapper>
