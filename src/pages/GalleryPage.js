@@ -47,7 +47,7 @@ const Underline = styled.div`
 
 const CardContainer = styled.div`
   width: 1000px;
-  height: 400px;
+  height: 100%;
   display: flex;
   flex-direction: Row;
   border-radius: 10px;
@@ -98,15 +98,17 @@ const HashtagContainer = styled.div`
   flex-direction: row;
   flex-wrap: wrap;
   max-width: 400px;
+  margin-bottom:30px;
 `;
 
-const Hashtag = styled.span`
+const Hashtag = styled.div`
+  height: 25px;
   background-color: #F6BD60;
   border-radius: 40px;
-  padding: 5px;
-  margin-Top : 10px;
-  margin-Bottom : 5px;
-  margin-right: 10px;
+  padding: 9px 12px 6px 13px;
+  margin-top : 10px;
+  margin-left: 12px;
+  margin-right: 8px;
 `;
 
 const Pagination = styled.div`
@@ -139,10 +141,15 @@ const PageText = styled.div`
     opacity: 1;
   }
 `;
+const IconTextContainer = styled.div`
+  display : flex;
+  flex-direction : row;
+  align-items: center;
+`;
 
 const Paw = styled.img`
   width: 38px; /* 이미지의 크기 조절 */
-  height: 38px;
+  height: 30px;
   margin-left: 100px;
   margin-right: 20px;
 `;
@@ -188,7 +195,7 @@ function GalleryPage() {
     <div>
       <ProfileContainer>
         <ColumnContainer>
-          <div><Paw src="/images/paw.png" alt="paw" /><Title>반려 버디 프로필</Title></div>
+          <IconTextContainer><Paw src="/images/paw.png" alt="paw" /><Title>반려 버디 프로필</Title></IconTextContainer>
           <Underline/>
         </ColumnContainer>
 
@@ -221,7 +228,7 @@ function GalleryPage() {
         </CardContainer>
 
         <ColumnContainer>
-          <div><Paw src="/images/paw.png" alt="paw" /><Title>반려 버디 추억 갤러리</Title></div>
+          <IconTextContainer><Paw src="/images/paw.png" alt="paw" /><Title>반려 버디 추억 갤러리</Title></IconTextContainer>
           <Underline/>
         </ColumnContainer>
 

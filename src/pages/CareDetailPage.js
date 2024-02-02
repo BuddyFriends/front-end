@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
-import ProfileInfo from '../components/ProfileInfo';
+import ProfileCard from '../components/ProfileCard';
 
 const ProfileContainer = styled.div`
   display: flex;
@@ -24,7 +24,6 @@ const LongUnderline = styled.div`
   width: 1000px;
   height: 2px;
   background-color: black;
-  margin-left: 50px;
 `;
 
 const ShortUnderline = styled.div`
@@ -89,12 +88,13 @@ const HashtagContainer = styled.div`
   max-width: 400px;
 `;
 
-const Hashtag = styled.span`
+const Hashtag = styled.div`
+  height: 25px;
   background-color: #F6BD60;
   border-radius: 40px;
-  padding: 5px;
-  margin-Top : 10px;
-  margin-Bottom : 5px;
+  padding: 9px 12px 6px 13px;
+  margin-top : 10px;
+  margin-left: 12px;
   margin-right: 8px;
 `;
 
@@ -114,11 +114,27 @@ const CircleImage = styled.img`
   border-radius: 50%;
 `;
 
-const SmallIcon = styled.img`
+const BigIcon = styled.img`
   width: 38px; /* 이미지의 크기 조절 */
-  height: 38px;
-  margin-left: 50px;
+  height: 30px;
   margin-right: 20px;
+  justify-content: center;
+  align-items: center;
+`;
+
+const SmallIcon = styled.img`
+  width: 24px; /* 이미지의 크기 조절 */
+  height: 26px;
+  margin-left: 56px;
+  margin-right: 35px;
+  justify-content: center;
+  align-items: center;
+`;
+
+const IconTextContainer = styled.div`
+  display : flex;
+  flex-direction : row;
+  align-items: center;
 `;
 
 const Title = styled.h1`
@@ -197,53 +213,13 @@ function CareDetailPage() {
     <div>
       <ProfileContainer>
       <ColumnContainer>
-      <div><SmallIcon src="/images/paw.png" alt="paw" /><Title>이름 돌봄 부탁드립니다.</Title></div>
+      <IconTextContainer>
+        <BigIcon src="/images/paw.png" alt="paw" />
+        <Title>이름 돌봄 부탁드립니다.</Title>
+      </IconTextContainer>
       <LongUnderline/>
       </ColumnContainer>
-
-      <CardContainer>
-      <CardTopContainer>
-        <TextContainer>
-          <SmallIcon src="/images/calendar_ic.png" alt="calendar" />
-          <ProfileText>2024-01-28</ProfileText>
-          <ProfileText>&nbsp;~&nbsp;</ProfileText>
-          <ProfileText>2024-01-31</ProfileText>
-        </TextContainer>
-
-        <TextContainer>
-          <SmallIcon src="/images/people_ic.png" alt="people" />
-          <ProfileText>여성만</ProfileText>
-        </TextContainer>
-        <ShortUnderline/>
-      </CardTopContainer>
-
-        <CardBottomContainer>
-          <ProfileCard1Container>
-            <CircleContainer>
-              <CircleImage src="/images/petProfile.png" alt="CareDetailpetProfile"></CircleImage>
-            </CircleContainer>
-          </ProfileCard1Container>
-
-          <ProfileCard2Container>
-          <ProfileDetailGridContainer>
-            <ProfileInfo label="나이" value="3" />
-            <ProfileInfo label="품종" value="비숑" />
-            <ProfileInfo label="좋아하는 것" value="고구마" />
-            <ProfileInfo label="싫어하는 것" value="꼬집기" />
-            <ProfileInfo label="복용약" value="없음" />
-          </ProfileDetailGridContainer>
-
-          <HashtagContainer>
-            {/* 초기값 또는 서버에서 받아온 값으로 매핑 */}
-            {serverHashtags.length > 0 ? serverHashtags.map((tag, index) => (
-              <Hashtag key={index}>{tag}</Hashtag>
-            )) : hashtags.map((tag, index) => (
-              <Hashtag key={index}>{tag}</Hashtag>
-            ))}
-        </HashtagContainer>
-          </ProfileCard2Container>
-        </CardBottomContainer>
-      </CardContainer>
+      <ProfileCard/>
       <LongUnderline/>
 
       <Textarea>
