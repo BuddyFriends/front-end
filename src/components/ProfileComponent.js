@@ -15,6 +15,7 @@ const Container = styled.div`
   align-items: center;
   justify-content: center;
   margin-bottom: 50px;
+  padding: 30px
 `;
 
 const LeftContainer = styled.div`
