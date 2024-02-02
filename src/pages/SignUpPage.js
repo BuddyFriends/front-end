@@ -2,11 +2,12 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
+import AddressInput from "../components/AddressInput";
 
 const PageContainer = styled.div`
   padding: 50px;
   display: flex;
-  justify-content: center;
+  justify-content: center; 
   align-items: center;
   background-color: #f8edeb;
   flex-direction: column;
@@ -108,8 +109,8 @@ const GenderButton = styled.button`
   margin-right: 10px;
   border: 3px solid #f6bd60;
   border-radius: 10px;
-  background-color: ${(props) => (props.isSelected ? "#F6BD60" : "#FFF")};
-  color: ${(props) => (props.isSelected ? "white" : "#F6BD60")};
+  background-color: ${props => props.isSelected ? '#F6BD60' : '#FFF'};
+  color: ${props => props.isSelected ? 'white' : '#F6BD60'};
   font-family: "SCDream6";
   font-size: 16px;
   cursor: pointer;
@@ -182,7 +183,7 @@ function SignUpPage() {
       if (response.status === 200) {
         console.log("Signup success:", response.data);
         localStorage.setItem("userInfo", JSON.stringify(response.data));
-        navigate("/");
+        navigate("/login");
       } else {
         console.error("Signup failed:", response.status);
       }
@@ -245,16 +246,7 @@ function SignUpPage() {
               onChange={handleChange}
             />
           </InputWrapper>
-          <InputWrapper>
-            <TextInput>거주지</TextInput>
-            <Input
-              type="text"
-              name="address"
-              placeholder=""
-              value={formData.agaddresse}
-              onChange={handleChange}
-            />
-          </InputWrapper>
+          <AddressInput formData={formData} handleChange={handleChange} />
           <InputWrapper>
             <TextInput>성별</TextInput>
             <RowWrapper>
