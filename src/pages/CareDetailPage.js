@@ -24,7 +24,6 @@ const LongUnderline = styled.div`
   width: 1000px;
   height: 2px;
   background-color: black;
-  margin-left: 50px;
 `;
 
 const ShortUnderline = styled.div`
