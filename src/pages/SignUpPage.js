@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
+import AddressInput from "../components/AddressInput";
 
 const PageContainer = styled.div`
   padding: 50px;
@@ -245,16 +246,7 @@ function SignUpPage() {
               onChange={handleChange}
             />
           </InputWrapper>
-          <InputWrapper>
-            <TextInput>거주지</TextInput>
-            <Input
-              type="text"
-              name="address"
-              placeholder=""
-              value={formData.agaddresse}
-              onChange={handleChange}
-            />
-          </InputWrapper>
+          <AddressInput formData={formData} handleChange={handleChange} />
           <InputWrapper>
             <TextInput>성별</TextInput>
             <RowWrapper>
