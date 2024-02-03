@@ -257,7 +257,7 @@ const ProfileComponent = ({ imageSrc, role, status, petName, startDate, endDate,
         <UploadModal onClose={closeUploadModal} />
       )}
       {isProfileModalOpen && (
-        <ProfileModal onClose={closeProfileModal} />
+        <ProfileModal onClose={closeProfileModal} startDate={startDate} endDate={endDate} imageSrc={imageSrc} />
       )}
       {isRatingModalOpen && (
         <RatingModal onClose={closeRatingModal} startDate={startDate} endDate={endDate} imageSrc={imageSrc} petName={petName} pawlevel={pawlevel} />

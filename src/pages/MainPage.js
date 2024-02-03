@@ -2,6 +2,15 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import { useNavigate } from "react-router-dom";
 
+const PageContainer = styled.div`
+  padding: 50px;
+  display: flex;
+  justify-content: center; 
+  align-items: center;
+  background-color: #f8edeb;
+  flex-direction: column;
+`;
+
 const MainContainer = styled.div`
   display: flex;
   align-items: center;
@@ -12,11 +21,11 @@ const MainContainer = styled.div`
 const ImageContainer = styled.div`
   border-radius: 200px;
   overflow: hidden;
-  margin-right: 100px; /* 이미지와 글씨 간 간격 조절 */
+  margin-right: 100px;
 `;
 
 const Image = styled.img`
-  width: 484px; /* 이미지의 크기 조절 */
+  width: 484px;
   height: 709px;
 `;
 
@@ -219,11 +228,7 @@ function MainPage() {
   };
 
   return (
-    <div style={{
-      backgroundColor: '#f8edeb',
-      display:'flex',
-      flexDirection:'column',
-    }}>
+    <PageContainer >
     <MainContainer>
       <ImageContainer>
         <Image src="/images/maincat.png" alt="cat" />
@@ -261,7 +266,7 @@ function MainPage() {
       <Arrows src="/images/right.png" onClick={handleRightArrowClick} />
     </ProfileContainer>
     </CareContainer>
-    </div>
+    </PageContainer>
   );
 }
 
