@@ -44,7 +44,7 @@ const AddPetContainer = styled.div`
   display: flex;
   justify-content: flex-start;
   gap: 10px;
-  width: 70%;
+  width: 1300px;
   margin-bottom: 20px;
 `;
 

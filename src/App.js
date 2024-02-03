@@ -29,10 +29,10 @@ function App() {
         <Route element={<CurrentCheckPage />} path="/check" />
         <Route element={<MyPage />} path="/mypage" />
         {/* <Route element={<MyPage />} path="/mypage/:userId" /> */}
-        <Route element={<ProfileEditPage />} path="/profileedit" />
-        {/* <Route element={<ProfileEditPage />} path="/profileedit/:userId" /> */}
-        <Route element={<PetAddPage />} path="/petadd" />
-        {/* <Route element={<PetAddPage />} path="/petadd/:userId" /> */}
+        <Route element={<ProfileEditPage />} path="/edit" />
+        {/* <Route element={<ProfileEditPage />} path="/edit/:userId" /> */}
+        <Route element={<PetAddPage />} path="/add" />
+        {/* <Route element={<PetAddPage />} path="/add/:userId" /> */}
       </Routes>
   );
 }
