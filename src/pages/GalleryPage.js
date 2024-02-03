@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import axios from 'axios'
 import GridPage from '../components/GridPage'
 import ProfileInfo from '../components/ProfileInfo';
+import GalleryProfile from '../components/GalleryProfile';
 import { useNavigate } from "react-router-dom";
 import ReactPaginate from 'react-paginate';
 
@@ -13,7 +14,6 @@ const ProfileContainer = styled.div`
   align-items: center;
   background-color: #f8edeb;
   padding: 100px;
-  margin-bottom: 20px;
 `;
 
 /* 
@@ -189,54 +189,8 @@ function Items({ currentItems }) {
 */
 
 
-function GalleryPage({ itemsPerPage }) {
+function GalleryPage() {
 
-  const [petData, setPetData] = useState([]); // 반려동물 데이터를 저장할 상태
-
-  // 로컬 스토리지에서 userInfo 가져오기
-  const userInfo = JSON.parse(localStorage.getItem('userInfo'));
-  const userId = userInfo ? userInfo.userId : null;
-
-  useEffect(() => {
-    const fetchPetData = async () => {
-
-      if (userId) {
-        try {
-          // axios를 사용하여 서버 요청
-          const response = await axios.get(`http://localhost:8080/api/pet/list`, {
-            params: {
-              userId: userId // 쿼리 파라미터로 userId 전달
-            }
-          });
-          setPetData(response.data); // 받아온 데이터로 상태 업데이트
-        } catch (error) {
-          console.error('Error fetching pet data:', error);
-        }
-      }
-    };
-
-    fetchPetData();
-  }, []);
-
-
-      // 초기값으로 설정할 해시태그
-      const initialHashtags = [
-        '#애교둥이',
-        '#간식을사랑해',
-        '#먹보',
-        '#가끔은새침해요',
-        '#산책하고뛰는걸좋아해요',
-      ];
-  
-      // 해시태그를 저장할 상태와, 서버에서 받아온 값을 저장할 상태
-    const [hashtags, setHashtags] = useState(initialHashtags);
-    const [serverHashtags, setServerHashtags] = useState([]);
-  
-    // 서버에서 값을 받아와서 hashtags 업데이트
-    useEffect(() => {
-      // 서버에서 값 받아오는 로직
-      // 예시: fetch('서버 API 주소').then(response => response.json()).then(data => setServerHashtags(data));
-    }, []);
 
     // 페이지네이션
 /*
@@ -269,39 +223,7 @@ function GalleryPage({ itemsPerPage }) {
           <IconTextContainer><Paw src="/images/paw.png" alt="paw" /><Title>반려 버디 프로필</Title></IconTextContainer>
           <Underline/>
         </ColumnContainer>
-
-        <CardContainer>
-          <ProfileCard1Container>
-            {petData.map((pet) =>(
-              <CircleContainer key={pet.petId}>
-              <CircleImage src={pet.petImage}/>
-            </CircleContainer>
-            ))}
-          <Title>뽀로리</Title>
-          </ProfileCard1Container>
-
-          <ProfileCard2Container>
-            {petData.map((pet) =>(
-              <ProfileDetailGridContainer key={pet.petId}>
-              <ProfileInfo label="나이" value={pet.petName} />
-              <ProfileInfo label="품종" value={pet.type} />
-              <ProfileInfo label="좋아하는 것" value={pet.petLike} />
-              <ProfileInfo label="싫어하는 것" value={pet.petDislike}/>
-              <ProfileInfo label="복용약" value={pet.medicine} />
-            </ProfileDetailGridContainer>
-            ))}
-          <HashtagContainer>
-            {/* 초기값 또는 서버에서 받아온 값으로 매핑 */}
-            {serverHashtags.length > 0 ? serverHashtags.map((tag, index) => (
-              <Hashtag key={index}>{tag}</Hashtag>
-            )) : hashtags.map((tag, index) => (
-              <Hashtag key={index}>{tag}</Hashtag>
-            ))}
-        </HashtagContainer>
-          </ProfileCard2Container>
-
-        </CardContainer>
-
+        <GalleryProfile/>
         <ColumnContainer>
           <IconTextContainer><Paw src="/images/paw.png" alt="paw" /><Title>반려 버디 추억 갤러리</Title></IconTextContainer>
           <Underline/>

@@ -109,7 +109,7 @@ function PetProfileCard({ isSelected, onClick }) {
   };
 
   return (
-    <PetCardArea isSelected={isSelected} onClick={onClick}>
+    <PetCardArea onClick={onClick} bgColor={isSelected ? '#f6bd60' : 'white'}>
     <CircleContainer>
     <CircleImage src="/images/petProfile.png"></CircleImage>
     </CircleContainer>

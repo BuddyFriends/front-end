@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
+import axios from 'axios';
 import ProfileInfo from '../components/ProfileInfo';
 
 const CardContainer = styled.div`
@@ -107,6 +108,34 @@ const SmallIcon = styled.img`
 
 
 const ProfileCard = () => {
+  const [petData, setPetData] = useState([]); // 반려동물 데이터를 저장할 상태
+
+  // 로컬 스토리지에서 userInfo 가져오기
+  const userInfo = JSON.parse(localStorage.getItem('userInfo'));
+  const userId = userInfo ? userInfo.userId : null;
+
+  useEffect(() => {
+    const fetchPetData = async () => {
+
+      if (userId) {
+        try {
+          // axios를 사용하여 서버 요청
+          const response = await axios.get(`http://localhost:8080/api/pet/list`, {
+            params: {
+              userId: userId // 쿼리 파라미터로 userId 전달
+            }
+          });
+          setPetData(response.data); // 받아온 데이터로 상태 업데이트
+        } catch (error) {
+          console.error('Error fetching pet data:', error);
+        }
+      }
+    };
+
+    fetchPetData();
+  }, []);
+
+
   // 초기값으로 설정할 해시태그
   const initialHashtags = [
     '#애교둥이',
