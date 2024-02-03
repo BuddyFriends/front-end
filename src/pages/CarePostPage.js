@@ -5,24 +5,26 @@ import axios from 'axios';
 import { useNavigate } from "react-router-dom";
 
 const PageContainer = styled.div`
-  padding: 50px;
   display: flex;
   background-color: #f8edeb;
   flex-direction: column;
+  align-items: center;
+  padding-left: 50px;
 `;
 
 const PowContaioner=styled.div`
-  text-align: center;
   display: flex;
   margin-top: 50px;
+  width: 1200px;
+  margin-left: 0px;
 `;
 
 const Paw = styled.img`
   width: 38px; /* 이미지의 크기 조절 */
   height: 38px;
-  margin-left: 50px;
   margin-right: 20px;
   padding-top: 20px;
+  margin-left: 0px;
 `;
 
 const Title = styled.h1`
@@ -34,7 +36,6 @@ const Underline = styled.div`
   height: 2px;
   width: 1200px;
   background-color: black;
-  margin-left: 50px;
 `;
 
 const Box = styled.div`
@@ -47,6 +48,7 @@ const Box = styled.div`
 
 const InputWrapper = styled.div`
   margin-bottom: 50px;
+  width: 1200px;
 `;
 
 const Input = styled.input`
