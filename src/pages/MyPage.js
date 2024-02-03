@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import UserInfo from "../components/UserInfo";
 import PetAdd from "../components/PetAdd";
@@ -49,6 +49,29 @@ const AddPetContainer = styled.div`
 `;
 
 function MyPage() {
+  const [petData, setPetData] = useState([]);
+  const userId = JSON.parse(localStorage.getItem("userInfo")).userId;
+
+  useEffect(() => {
+    async function fetchPetData() {
+      try {
+        const response = await fetch(
+          `http://localhost:8080/api/pet/list?userId=${userId}`
+        );
+        if (response.ok) {
+          const data = await response.json();
+          setPetData(data);
+        } else {
+          console.error("Failed to fetch pet data");
+        }
+      } catch (error) {
+        console.error("Error fetching pet data:", error);
+      }
+    }
+
+    fetchPetData();
+  }, [userId]);
+
   return (
     <PageContainer>
       <TitleContainer>
@@ -64,8 +87,9 @@ function MyPage() {
       </TitleContainer>
       <HorizontalLine />
       <AddPetContainer>
-        <PetAdd imageSrc="/images/petProfile.png" name="뽀로리" />
-        <PetAdd imageSrc="/images/petProfile.png" name="뽀로리" />
+        {petData.map((pet) => (
+          <PetAdd key={pet.petId} imageSrc={pet.petImage} name={pet.petName} />
+        ))}
         <PetAdd imageSrc="" name="새로운 반려동물 등록" />
       </AddPetContainer>
 
