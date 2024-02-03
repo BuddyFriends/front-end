@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import ProfileCard from '../components/ProfileCard';
+import PetProfileCard from '../components/PetProfileCard';
 
 const ProfileContainer = styled.div`
   display: flex;
@@ -21,7 +22,7 @@ const ColumnContainer = styled.div`
 `;
 
 const LongUnderline = styled.div`
-  width: 1000px;
+  width: 1024px;
   height: 2px;
   background-color: black;
 `;
@@ -150,7 +151,7 @@ const ProfileText = styled.h3`
 
 
 const Textarea = styled.div`
-  margin-bottom: 15px;
+  margin-bottom: 75px;
   padding: 30px;
   border: 3px solid #f6bd60;
   border-radius: 20px;
@@ -168,14 +169,14 @@ const TextContent = styled.p`
 `;
 
 const ButtonContainer = styled.div`
-  width: 1000px;
+  width: 1024px;
   display: flex;
   flex-direction: Row-reverse;
 `;
 
 const Button = styled.button`
   padding: 10px 20px;
-  margin-top: 40px;
+  margin-top: 70px;
   width: 250px;
   height: 50px;
   border: none;
@@ -187,6 +188,31 @@ const Button = styled.button`
   font-size: 26px;
   cursor: pointer;
 `;
+
+const PetCardContainer = styled.div`
+  display: flex;
+  flex-direction: Row;
+`;
+
+const UnderContainer = styled.div`
+  display: flex;
+  flex-direction: Column;
+`;
+
+const ArrowContainer = styled.div`
+  display: flex;
+  justify-content: center; /* 수평 중앙 정렬 */
+  align-items: center;
+  margin-left: 36px;
+  margin-right: 36px;
+`;
+
+const Arrows = styled.img`
+  width: 20px;
+  height: 36px;
+`;
+
+
 
 function CareDetailPage() {
 
@@ -225,7 +251,20 @@ function CareDetailPage() {
       <Textarea>
         <TextContent>* 우리 뽀로리를 맡아주실 분을 구합니다.<br/>산책을 매우 좋아하고 온순한 강아지입니다.</TextContent>
       </Textarea>
-
+      <LongUnderline/>
+      <UnderContainer>
+      <PetCardContainer>
+        <ArrowContainer>
+          <Arrows src="images/left.png"></Arrows>
+        </ArrowContainer>
+      <PetProfileCard/>
+      <PetProfileCard/>
+      <PetProfileCard/>
+      <ArrowContainer>
+          <Arrows src="images/right.png"></Arrows>
+        </ArrowContainer>
+      </PetCardContainer>
+      </UnderContainer>
       <ButtonContainer>
         <Button type="submit">신청하기</Button>
       </ButtonContainer>
