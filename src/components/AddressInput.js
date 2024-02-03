@@ -57,15 +57,22 @@ function AddressInput({ formData, handleChange }) {
           if (status === window.kakao.maps.services.Status.OK) {
             const fullAddress = result[0].address.address_name;
             const addressParts = fullAddress.split(" ");
-            const city = addressParts.slice(0, 2).join(" "); 
+            const city = addressParts.slice(0, 2).join(" ");
             setAddress(city);
+
+            handleChange({
+              target: {
+                name: "address",
+                value: city,
+              },
+            });
           } else {
             console.log("Geocoder failed:", status);
           }
         }
       );
     }
-  }, [loaded, location, setAddress]);
+  }, [loaded, location, setAddress, handleChange]);
 
   return (
     <InputWrapper>
@@ -75,7 +82,10 @@ function AddressInput({ formData, handleChange }) {
         name="address"
         placeholder=""
         value={address}
-        onChange={handleChange}
+        onChange={(e) => {
+          setAddress(e.target.value);
+          handleChange(e); 
+        }}
         disabled={!loaded}
       />
     </InputWrapper>
