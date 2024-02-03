@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
+import axios from 'axios'
 import GridPage from '../components/GridPage'
 import ProfileInfo from '../components/ProfileInfo';
 import { useNavigate } from "react-router-dom";
@@ -190,6 +191,34 @@ function Items({ currentItems }) {
 
 function GalleryPage({ itemsPerPage }) {
 
+  const [petData, setPetData] = useState([]); // 반려동물 데이터를 저장할 상태
+
+  // 로컬 스토리지에서 userInfo 가져오기
+  const userInfo = JSON.parse(localStorage.getItem('userInfo'));
+  const userId = userInfo ? userInfo.userId : null;
+
+  useEffect(() => {
+    const fetchPetData = async () => {
+
+      if (userId) {
+        try {
+          // axios를 사용하여 서버 요청
+          const response = await axios.get(`http://localhost:8080/api/pet/list`, {
+            params: {
+              userId: userId // 쿼리 파라미터로 userId 전달
+            }
+          });
+          setPetData(response.data); // 받아온 데이터로 상태 업데이트
+        } catch (error) {
+          console.error('Error fetching pet data:', error);
+        }
+      }
+    };
+
+    fetchPetData();
+  }, []);
+
+
       // 초기값으로 설정할 해시태그
       const initialHashtags = [
         '#애교둥이',
@@ -243,20 +272,24 @@ function GalleryPage({ itemsPerPage }) {
 
         <CardContainer>
           <ProfileCard1Container>
-          <CircleContainer>
-            <CircleImage src="/images/petProfile.png"/>
-          </CircleContainer>
+            {petData.map((pet) =>(
+              <CircleContainer key={pet.petId}>
+              <CircleImage src={pet.petImage}/>
+            </CircleContainer>
+            ))}
           <Title>뽀로리</Title>
           </ProfileCard1Container>
 
           <ProfileCard2Container>
-          <ProfileDetailGridContainer>
-            <ProfileInfo label="나이" value="3" />
-            <ProfileInfo label="품종" value="비숑" />
-            <ProfileInfo label="좋아하는 것" value="고구마" />
-            <ProfileInfo label="싫어하는 것" value="꼬집기" />
-            <ProfileInfo label="복용약" value="없음" />
-          </ProfileDetailGridContainer>
+            {petData.map((pet) =>(
+              <ProfileDetailGridContainer key={pet.petId}>
+              <ProfileInfo label="나이" value={pet.petName} />
+              <ProfileInfo label="품종" value={pet.type} />
+              <ProfileInfo label="좋아하는 것" value={pet.petLike} />
+              <ProfileInfo label="싫어하는 것" value={pet.petDislike}/>
+              <ProfileInfo label="복용약" value={pet.medicine} />
+            </ProfileDetailGridContainer>
+            ))}
           <HashtagContainer>
             {/* 초기값 또는 서버에서 받아온 값으로 매핑 */}
             {serverHashtags.length > 0 ? serverHashtags.map((tag, index) => (
