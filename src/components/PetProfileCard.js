@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 
 const PetCardArea = styled.div`
@@ -10,7 +10,7 @@ const PetCardArea = styled.div`
   padding: 39px 40px 28px 40px; 
   margin-top: 70px;
   border-radius: 40px;
-  background-color: white;
+  background-color: ${(props) => props.isSelected ? '#f6bd60' : 'white'};
   margin-left: 15px;
   margin-right: 15px;
 `;
@@ -98,9 +98,18 @@ const IntroduceText = styled.text`
   padding-bottom:10px;
 `;
 
-function PetProfileCard() {
+function PetProfileCard({ isSelected, onClick }) {
+  // 펫프로필 카드 배경 변경
+  // 클릭 상태를 관리하기 위한 상태 변수 추가
+  const [isClicked, setIsClicked] = useState(false);
+
+  // 클릭 이벤트 핸들러 함수
+  const handleClick = () => {
+    setIsClicked(!isClicked); // 클릭 상태를 토글
+  };
+
   return (
-    <PetCardArea>
+    <PetCardArea isSelected={isSelected} onClick={onClick}>
     <CircleContainer>
     <CircleImage src="/images/petProfile.png"></CircleImage>
     </CircleContainer>
