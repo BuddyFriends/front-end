@@ -167,7 +167,7 @@ function SignUpPage() {
       age: parseInt(formData.age, 10),
       intro: formData.intro,
       chat: formData.chat,
-      smell: 0,
+      smell: 4,
       grade: "마스터",
     };
 
