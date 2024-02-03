@@ -6,18 +6,18 @@ const PageContainer = styled.div`
   display: flex;
   background-color: #f8edeb;
   flex-direction: column;
+  align-items: center;
 `;
 
 const PowContaioner = styled.div`
-  text-align: center;
   display: flex;
   margin-top: 50px;
+  width: 1200px;
 `;
 
 const Paw = styled.img`
   width: 38px;
   height: 38px;
-  margin-left: 100px;
   margin-right: 20px;
   padding-top: 20px;
 `;
@@ -31,7 +31,6 @@ const Underline = styled.div`
   height: 2px;
   width: 1200px;
   background-color: black;
-  margin-left: 100px;
 `;
 
 const InputWrapper = styled.div`
@@ -41,6 +40,7 @@ const InputWrapper = styled.div`
   align-items: center;
   justify-content: center;
   align-items: center;
+  width: 1200px;
 `;
 
 const TextInput = styled.p`
