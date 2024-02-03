@@ -33,87 +33,6 @@ const ShortUnderline = styled.div`
   margin-left: 50px;
 `;
 
-const CardContainer = styled.div`
-  width: 1000px;
-  height: 100%;
-  display: flex;
-  flex-direction: Column;
-  border-radius: 10px;
-  background-color: #F9DCC4;
-  margin-Top : 50px;
-  margin-Bottom : 50px;
-  padding: 30px 30px 10px 10px;
-`;
-
-const CardTopContainer = styled.div`
-  display : flex;
-  flex-direction: Column;
-`;
-
-const TextContainer = styled.div`
-  display: flex;
-  align-items: center;
-  margin: 0px;
-`;
-
-const CardBottomContainer = styled.div`
-  display : flex;
-  flex-direction: Row;
-`;
-
-const ProfileCard1Container = styled.div`
-  display: flex;
-  flex-direction: Column;
-  text-align: center;
-  padding : 10px;
-`;
-
-const ProfileCard2Container = styled.div`
-  display: flex;
-  flex-direction: Column;
-  text-align: center;
-  padding : 10px;
-`;
-
-const ProfileDetailGridContainer = styled.div`
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 16px;
-  margin-Bottom: 30px;
-`;
-
-const HashtagContainer = styled.div`
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  max-width: 400px;
-`;
-
-const Hashtag = styled.div`
-  height: 25px;
-  background-color: #F6BD60;
-  border-radius: 40px;
-  padding: 9px 12px 6px 13px;
-  margin-top : 10px;
-  margin-left: 12px;
-  margin-right: 8px;
-`;
-
-const CircleContainer = styled.div`
-  display : flex;
-  flex-direction: Row;
-  text-align: center;
-  margin-Top : 30px;
-  margin-left: 50px;
-  margin-Right: 50px;
-  margin-Bottom : 30px;
-`;
-
-const CircleImage = styled.img`
-  width: 200px;
-  height: 200px;
-  border-radius: 50%;
-`;
 
 const BigIcon = styled.img`
   width: 38px; /* 이미지의 크기 조절 */
@@ -216,6 +135,14 @@ const Arrows = styled.img`
 
 function CareDetailPage() {
 
+  // PetProfileCard 클릭 시 배경색 변경
+  const [selectedCardIndex, setSelectedCardIndex] = useState(null); // 선택된 카드 인덱스
+
+  // 각 PetProfileCard의 클릭 이벤트 핸들러
+  const handleCardClick = (index) => {
+    setSelectedCardIndex(index); // 클릭된 카드의 인덱스를 상태로 저장
+  };
+
     // 초기값으로 설정할 해시태그
     const initialHashtags = [
       '#애교둥이',
@@ -257,9 +184,13 @@ function CareDetailPage() {
         <ArrowContainer>
           <Arrows src="images/left.png"></Arrows>
         </ArrowContainer>
-      <PetProfileCard/>
-      <PetProfileCard/>
-      <PetProfileCard/>
+        {[0, 1, 2].map((index) => ( // 예시로 3개의 카드를 렌더링
+            <PetProfileCard
+              key={index}
+              isSelected={selectedCardIndex === index} // 현재 카드가 선택된 상태인지 여부
+              onClick={() => handleCardClick(index)} // 클릭 이벤트 핸들러
+            />
+          ))}
       <ArrowContainer>
           <Arrows src="images/right.png"></Arrows>
         </ArrowContainer>
