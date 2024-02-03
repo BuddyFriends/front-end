@@ -15,7 +15,6 @@ const Box = styled.div`
   background-color: #fcd7ba;
   box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
   margin-bottom: 60px;
-  /* margin-top: 20px;  */
 `;
 
 const ProfileSection = styled.div`
@@ -96,7 +95,7 @@ function UserInfo() {
   const navigate = useNavigate();
 
   function handleEdit() {
-    navigate("/profileedit");
+    navigate("/edit");
   }
 
   return (

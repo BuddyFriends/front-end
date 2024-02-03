@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
 
@@ -152,7 +152,9 @@ function ProfileEditPage() {
     age: "",
     intro: "",
     chat: "",
+    profileImage: null,
   });
+  const fileInputRef = useRef(null); 
 
   const handleAgeChange = (e) => {
     const { name, value } = e.target;
@@ -161,6 +163,21 @@ function ProfileEditPage() {
       [name]: value,
     }));
   };
+
+  const handleImageChange = (e) => {
+    if (e.target.files && e.target.files[0]) {
+      const file = e.target.files[0];
+      setFormData((prevState) => ({
+        ...prevState,
+        petImage: URL.createObjectURL(file),
+      }));
+    }
+  };
+
+  const triggerFileInput = () => {
+    fileInputRef.current.click();
+  };
+
 
   const handleSexChange = (e) => {
     const { name, value } = e.target;
@@ -184,8 +201,14 @@ function ProfileEditPage() {
       <HorizontalLine />
       <ProfileContainer>
         <FormContainer>
-          <LeftSection>
-            <ProfileImage src="/images/cat.png" alt="Profile" />
+          <LeftSection onClick={triggerFileInput}>
+            <ProfileImage src={formData.petImage || "/images/cat.png"} alt="Profile" />
+            <input
+              type="file"
+              ref={fileInputRef}
+              onChange={handleImageChange}
+              style={{ display: 'none' }}
+            />
           </LeftSection>
           <RightSection>
             <Input placeholder="닉네임" />

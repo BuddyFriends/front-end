@@ -53,7 +53,7 @@ function PetAdd({ imageSrc, name }) {
 
   const handleCardClick = () => {
     if (name === "새로운 반려동물 등록") {
-      navigate('/petadd');
+      navigate('/add');
     } else {
       navigate('/gallery');
     }
