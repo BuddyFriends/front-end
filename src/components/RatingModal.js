@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
+import axios from 'axios';
+
 
 const ModalWrapper = styled.div`
   position: fixed;
@@ -188,19 +190,21 @@ const Button=styled.button`
 
 
 const RatingModal = ({ onClose, startDate, endDate, imageSrc, petName, pawlevel }) => {
-  const [rating, setRating] = useState(0);
+  const [smell, setRating] = useState(0);
 
   const rateStar = (star) => {
     setRating(star);
   };
 
-  const saveRating = () => {
-    alert(`꼬순내 저장: ${rating}/5`);
+  const getStarImage = (star) => {
+    return star <= smell ? '/images/paw3.png' : '/images/paw2.png';
   };
 
-  const getStarImage = (star) => {
-    return star <= rating ? '/images/paw3.png' : '/images/paw2.png';
+  const saveRating = async () => {
+    const apiUrl = "http://localhost:8080/api/user/smell";
+
   };
+
   
   return (
     <ModalWrapper>
@@ -231,7 +235,7 @@ const RatingModal = ({ onClose, startDate, endDate, imageSrc, petName, pawlevel 
           </BuddyNameContainer>
           <BuddyNameContainer>
             <BuddyRole>꼬순내</BuddyRole>
-              <BuddyName>{`꼬순내 저장: ${rating}/5`}</BuddyName>
+              <BuddyName>{`꼬순내 저장: ${smell}/5`}</BuddyName>
           </BuddyNameContainer>
           </ContentContainer>
           <RatingContainer>
