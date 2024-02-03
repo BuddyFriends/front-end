@@ -1,6 +1,7 @@
 import React, { useState, useRef } from "react";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 const PageContainer = styled.div`
   display: flex;
@@ -142,19 +143,45 @@ const Separator = styled.hr`
 
 function ProfileEditPage() {
   const navigate = useNavigate();
+
+  const userInfo = localStorage.getItem("userInfo");
+
   const [formData, setFormData] = useState({
-    userId: "",
-    userName: "",
-    password: "",
+    userId: JSON.parse(userInfo).userId,
     nickName: "",
     address: "",
-    sex: "",
+    sex: true,
     age: "",
     intro: "",
     chat: "",
     profileImage: null,
   });
-  const fileInputRef = useRef(null); 
+  const fileInputRef = useRef(null);
+
+
+  const handleNickNameChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prevState) => ({
+      ...prevState,
+      [name]: value,
+    }));
+  };
+
+  const handleAddressChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prevState) => ({
+      ...prevState,
+      [name]: value,
+    }));
+  };
+
+  const handleIntroChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prevState) => ({
+      ...prevState,
+      [name]: value,
+    }));
+  };
 
   const handleAgeChange = (e) => {
     const { name, value } = e.target;
@@ -178,18 +205,44 @@ function ProfileEditPage() {
     fileInputRef.current.click();
   };
 
-
   const handleSexChange = (e) => {
     const { name, value } = e.target;
+    const isMale = value === "남자" ? true : false;
     setFormData((prevState) => ({
       ...prevState,
-      [name]: value,
+      [name]: isMale,
     }));
   };
 
-  const handleSubmit = () => {
-    console.log(formData);
-    navigate("/mypage");
+  const handleSubmit = async () => {
+    try {
+      const response = await axios.put(
+        "http://localhost:8080/api/user/update",
+        formData,
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      if (response.status === 200) {
+        console.log("Profile update success:", response.data);
+        const updatedUserInfo = {
+          ...JSON.parse(userInfo),
+          ...formData,
+        };
+        localStorage.setItem("userInfo", JSON.stringify(updatedUserInfo));
+        navigate("/mypage");
+      } else {
+        console.error("Profile update failed:", response.status);
+      }
+    } catch (error) {
+      console.error("Error during profile update:", error);
+      if (error.response) {
+        console.error("Response data:", error.response.data);
+      }
+    }
   };
 
   return (
@@ -202,16 +255,24 @@ function ProfileEditPage() {
       <ProfileContainer>
         <FormContainer>
           <LeftSection onClick={triggerFileInput}>
-            <ProfileImage src={formData.petImage || "/images/cat.png"} alt="Profile" />
+            <ProfileImage
+              src={formData.petImage || "/images/cat.png"}
+              alt="Profile"
+            />
             <input
               type="file"
               ref={fileInputRef}
               onChange={handleImageChange}
-              style={{ display: 'none' }}
+              style={{ display: "none" }}
             />
           </LeftSection>
           <RightSection>
-            <Input placeholder="닉네임" />
+            <Input
+              name="nickName"
+              placeholder="닉네임"
+              value={formData.nickName}
+              onChange={handleNickNameChange}
+            />
             <FormRow>
               <Select name="age" onChange={handleAgeChange}>
                 <option value="10">10대</option>
@@ -226,11 +287,22 @@ function ProfileEditPage() {
                 <option value="여자">여자</option>
               </Select>
             </FormRow>
-            <Input placeholder="거주 지역" />
+            <Input
+              name="address"
+              placeholder="거주 지역"
+              value={formData.address}
+              onChange={handleAddressChange}
+            />
           </RightSection>
         </FormContainer>
         <Separator />
-        <TextArea rows="4" placeholder="한 줄 소개" />
+        <TextArea
+          name="intro"
+          rows="4"
+          placeholder="한 줄 소개"
+          value={formData.intro}
+          onChange={handleIntroChange}
+        />
       </ProfileContainer>
       <SubmitButton onClick={handleSubmit}>수정하기</SubmitButton>
     </PageContainer>
