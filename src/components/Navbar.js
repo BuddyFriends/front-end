@@ -43,7 +43,8 @@ const Navber = () => {
 
   const handleLogout = async () => {
     try {
-      // 로그인 정보를 localStorage에서 삭제
+      // http://localhost:8080/api/user/logout?userId=userInfo.userId
+      const response = await fetch(`http://localhost:8080/api/user/logout?userId=${userInfo.userId}`);
       localStorage.removeItem('userInfo');
       setUserInfo(null);
     } catch (error) {
