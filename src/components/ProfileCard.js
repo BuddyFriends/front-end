@@ -3,11 +3,11 @@ import styled from 'styled-components';
 import ProfileInfo from '../components/ProfileInfo';
 
 const CardContainer = styled.div`
-  width: 1000px;
+  width: 1024px;
   height: 100%;
   display: flex;
   flex-direction: Column;
-  border-radius: 10px;
+  border-radius: 40px;
   background-color: #F9DCC4;
   margin-Top : 50px;
   margin-Bottom : 50px;
@@ -104,6 +104,7 @@ const SmallIcon = styled.img`
   justify-content: center;
   align-items: center;
 `;
+
 
 const ProfileCard = () => {
   // 초기값으로 설정할 해시태그
