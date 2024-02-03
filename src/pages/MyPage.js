@@ -27,10 +27,10 @@ const Paw = styled.img`
 `;
 
 const HorizontalLine = styled.div`
-  width: 70%;
+  width: 1300px;
   height: 2px;
   background-color: #010c26;
-  /* margin-bottom: 30px; */
+  margin-bottom: 30px;
 `;
 
 const TitleText = styled.p`
@@ -42,8 +42,8 @@ const TitleText = styled.p`
 
 const AddPetContainer = styled.div`
   display: flex;
-  justify-content: flex-start; // Align items to the start
-  gap: 10px; // Reduce the gap between items
+  justify-content: flex-start;
+  gap: 10px;
   width: 70%;
   margin-bottom: 20px;
 `;
@@ -55,14 +55,14 @@ function MyPage() {
         <Paw src="/images/paw.png" alt="paw" />
         <TitleText>마이페이지</TitleText>
       </TitleContainer>
-      {/* <HorizontalLine /> */}
+      <HorizontalLine />
       <UserInfo />
 
       <TitleContainer>
         <Paw src="/images/paw.png" alt="paw" />
         <TitleText>반려 동물 등록하기</TitleText>
       </TitleContainer>
-      {/* <HorizontalLine /> */}
+      <HorizontalLine />
       <AddPetContainer>
         <PetAdd imageSrc="/images/petProfile.png" name="뽀로리" />
         <PetAdd imageSrc="/images/petProfile.png" name="뽀로리" />
@@ -73,7 +73,7 @@ function MyPage() {
         <Paw src="/images/paw.png" alt="paw" />
         <TitleText>돌봄 로그 기록</TitleText>
       </TitleContainer>
-      {/* <HorizontalLine /> */}
+      <HorizontalLine />
       <ProfileComponent
         imageSrc="/images/cat.png"
         role="buddy"
