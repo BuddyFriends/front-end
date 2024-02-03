@@ -170,27 +170,30 @@ const AreaTitle = styled.div`
 
 function PetAddPage() {
   const navigate = useNavigate();
+  const userId = JSON.parse(localStorage.getItem("userInfo")).userId;
+
   const [formData, setFormData] = useState({
-    userId: "",
-    userName: "",
-    password: "",
-    nickName: "",
-    address: "",
-    sex: "",
-    age: "",
-    intro: "",
-    chat: "",
+    userId: userId,
+    petName: "",
+    petAge: "",
+    species: "강아지",
+    type: "",
+    petLike: "",
+    petDislike: "",
+    medicine: "",
+    tag: "",
     petImage: null,
   });
-  const fileInputRef = useRef(null); 
 
-  const handleSpeciesChange = (e) => {
+  const fileInputRef = useRef(null);
+
+  const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData((prevState) => ({
       ...prevState,
       [name]: value,
     }));
-  };
+  };  
 
   const handleImageChange = (e) => {
     if (e.target.files && e.target.files[0]) {
@@ -206,10 +209,55 @@ function PetAddPage() {
     fileInputRef.current.click();
   };
 
-  const handleSubmit = () => {
-    console.log(formData);
-    navigate("/mypage");
+  const handleSubmit = async () => {
+    const petInfo = {
+      userId: userId,
+      petName: formData.petName,
+      petAge: parseInt(formData.petAge, 10),
+      species: formData.species,
+      type: formData.type,
+      petLike: formData.petLike,
+      petDislike: formData.petDislike,
+      medicine: formData.medicine || "없음",
+      tag: formData.tag,
+    };
+  
+    const formDataToSend = new FormData();
+    formDataToSend.append("pet", JSON.stringify(petInfo));
+  
+    if (fileInputRef.current && fileInputRef.current.files[0]) {
+      formDataToSend.append("image", fileInputRef.current.files[0]); // Change formData to formDataToSend here
+    } else {
+      alert("이미지를 선택해주세요.");
+      return;
+    }
+  
+    for (let [key, value] of formDataToSend.entries()) {
+      console.log(key, value);
+    }
+  
+    try {
+      const response = await fetch("http://localhost:8080/api/pet/add", {
+        method: "POST",
+        body: formDataToSend,
+      });
+  
+      console.log("Sending pet info:", petInfo);
+  
+      if (response.ok) {
+        const result = await response.json();
+        navigate("/mypage");
+      } else {
+        const errorData = await response.text();
+        console.error("Failed to register pet:", errorData);
+        alert("반려동물 등록에 실패했습니다.");
+      }
+    } catch (error) {
+      console.error("Error:", error);
+      alert("서버 통신 오류가 발생했습니다.");
+    }
   };
+  
 
   return (
     <PageContainer>
@@ -221,40 +269,96 @@ function PetAddPage() {
       <ProfileContainer>
         <FormContainer>
           <LeftSection onClick={triggerFileInput}>
-            <ProfileImage src={formData.petImage || "/images/cat.png"} alt="Profile" />
+            <ProfileImage
+              src={formData.petImage || "/images/cat.png"}
+              alt="Profile"
+            />
             <input
               type="file"
               ref={fileInputRef}
               onChange={handleImageChange}
-              style={{ display: 'none' }}
+              style={{ display: "none" }}
             />
           </LeftSection>
           <RightSection>
-            <Input placeholder="이름" />
+            <Input
+              name="petName"
+              value={formData.petName}
+              placeholder="이름"
+              onChange={(e) =>
+                setFormData({ ...formData, petName: e.target.value })
+              }
+            />
             <FormRow>
-              <SmallInput placeholder="나이" />
-              <Select name="species" onChange={handleSpeciesChange}>
-                <option value="남자">강아지</option>
-                <option value="여자">고양이</option>
-                <option value="여자">햄스터</option>
-                <option value="여자">조류</option>
-                <option value="여자">기타</option>
+              <SmallInput
+                name="petAge"
+                value={formData.petAge}
+                placeholder="나이"
+                onChange={(e) =>
+                  setFormData({ ...formData, petAge: e.target.value })
+                }
+              />
+              <Select
+                name="species"
+                value={formData.species}
+                onChange={handleInputChange}
+              >
+                <option value="강아지">강아지</option>
+                <option value="고양이">고양이</option>
+                <option value="햄스터">햄스터</option>
+                <option value="조류">조류</option>
+                <option value="기타">기타</option>
               </Select>
-              <SmallInput placeholder="품종" />
+              <SmallInput
+                name="type"
+                value={formData.type}
+                placeholder="품종"
+                onChange={(e) =>
+                  setFormData({ ...formData, type: e.target.value })
+                }
+              />
             </FormRow>
-            <Input placeholder="좋아하는 것" />
-            <Input placeholder="싫어하는 것" />
+            <Input
+              name="petLike"
+              value={formData.petLike}
+              placeholder="좋아하는 것"
+              onChange={(e) =>
+                setFormData({ ...formData, petLike: e.target.value })
+              }
+            />
+            <Input
+              name="petDislike"
+              value={formData.petDislike}
+              placeholder="싫어하는 것"
+              onChange={(e) =>
+                setFormData({ ...formData, petDislike: e.target.value })
+              }
+            />
           </RightSection>
         </FormContainer>
         <Separator />
         <AreaContainer>
           <AreaTitle>복용약</AreaTitle>
-          <TextArea rows="4" placeholder="복용중인 약을 작성해주세요" />
+          <TextArea
+            name="medicine"
+            value={formData.medicine}
+            rows="4"
+            placeholder="복용중인 약을 작성해주세요"
+            onChange={(e) =>
+              setFormData({ ...formData, medicine: e.target.value })
+            }
+          />
         </AreaContainer>
         <Separator />
         <AreaContainer>
           <AreaTitle>태그</AreaTitle>
-          <TextArea rows="4" placeholder="#귀여워#멋있어#산책좋아~" />
+          <TextArea
+            name="tag"
+            value={formData.tag}
+            rows="4"
+            placeholder="#귀여워#멋있어#산책좋아~"
+            onChange={(e) => setFormData({ ...formData, tag: e.target.value })}
+          />
         </AreaContainer>
       </ProfileContainer>
       <SubmitButton onClick={handleSubmit}>등록하기</SubmitButton>

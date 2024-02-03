@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { useNavigate, Link } from "react-router-dom";
 import BeginnerPaw from "../assets/icons/beginner.png";
@@ -93,6 +93,36 @@ const PawScore = styled.img`
 
 function UserInfo() {
   const navigate = useNavigate();
+  const [userInfo, setUserInfo] = useState({
+    userNickName: "",
+    grade: "",
+    sex: true,
+    address: "",
+    smell: 0,
+    intro: "",
+  });
+
+  useEffect(() => {
+    const storedUserInfo = localStorage.getItem('userInfo');
+    if (storedUserInfo) {
+      const parsedUserInfo = JSON.parse(storedUserInfo);
+      setUserInfo({
+        ...parsedUserInfo,
+        sex: parsedUserInfo.sex ? "남성" : "여성",
+      });
+    }
+  }, []);
+
+  const getGradePaw = (grade) => {
+    switch (grade) {
+      case "마스터":
+        return MasterPaw;
+      case "노말":
+        return NormalPaw;
+      default:
+        return BeginnerPaw;
+    }
+  };
 
   function handleEdit() {
     navigate("/edit");
@@ -104,27 +134,28 @@ function UserInfo() {
         <CircleImage src="/images/petProfile.png" alt="Profile" />
         <InfoGrid>
           <Label>닉네임</Label>
-          <Content>유저의 닉네임이름</Content>
+          <Content>{userInfo.userNickName}</Content>
           <Label>등급</Label>
           <GradeContainer>
-            <Content>Beginner Level</Content>
-            <GradePaw src={BeginnerPaw} alt="paw" />
+            <Content>{userInfo.grade}</Content>
+            <GradePaw src={getGradePaw(userInfo.grade)} alt="paw" />
           </GradeContainer>
           <Label>성별</Label>
-          <Content>성별</Content>
+          <Content>{userInfo.sex}</Content>
           <Label>거주지역</Label>
-          <Content>지역</Content>
+          <Content>{userInfo.address}</Content>
           <Label>꼬순내</Label>
           <Content>
-            <PawScore src="/images/paw.png" alt="paw" /> 3.8
+            <PawScore src="/images/paw.png" alt="paw" /> {userInfo.smell}
           </Content>
           <Label>한줄소개</Label>
-          <Content>소개</Content>
+          <Content>{userInfo.intro}</Content>
         </InfoGrid>
       </ProfileSection>
       <EditButton onClick={handleEdit}>프로필 수정</EditButton>
     </Box>
   );
 }
+
 
 export default UserInfo;
