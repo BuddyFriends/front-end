@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
-import axios from 'axios';
+import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
 const PageContainer = styled.div`
@@ -12,7 +12,7 @@ const PageContainer = styled.div`
   padding-left: 50px;
 `;
 
-const PowContaioner=styled.div`
+const PowContaioner = styled.div`
   display: flex;
   margin-top: 50px;
   width: 1200px;
@@ -20,8 +20,8 @@ const PowContaioner=styled.div`
 `;
 
 const Paw = styled.img`
-  width: 38px; /* 이미지의 크기 조절 */
-  height: 38px;
+  width: 38px;
+  height: 30px;
   margin-right: 20px;
   padding-top: 20px;
   margin-left: 0px;
@@ -61,25 +61,24 @@ const Input = styled.input`
   font-family: "SCDream4";
 `;
 
-const DateSelect=styled.div`
-  display:flex;
+const DateSelect = styled.div`
+  display: flex;
 `;
 
-const Inputa=styled.div`
-    font-size: 20px;
-    margin: 20px;
+const Inputa = styled.div`
+  font-size: 20px;
+  margin: 20px;
 `;
 
-const InputDate=styled.input`
-    margin-bottom: 15px;
-    padding: 15px;
-    border: 3px solid #f6bd60;
-    border-radius: 10px;
-    font-size: 20px;
-    font-family: "SCDream4";
-    width: 370px;
+const InputDate = styled.input`
+  margin-bottom: 15px;
+  padding: 15px;
+  border: 3px solid #f6bd60;
+  border-radius: 10px;
+  font-size: 20px;
+  font-family: "SCDream4";
+  width: 370px;
 `;
-
 
 const Textarea = styled.textarea`
   margin-bottom: 15px;
@@ -89,14 +88,14 @@ const Textarea = styled.textarea`
   width: 925px;
   height: 625px;
   font-size: 20px;
-  font-family: 'SCDream4';
+  font-family: "SCDream4";
 `;
 
 const TextInput = styled.p`
   margin-bottom: 20px;
   font-size: 24px;
-  font-family: 'SCDream5';
-  color: #010C26;
+  font-family: "SCDream5";
+  color: #010c26;
 `;
 
 const Button = styled.button`
@@ -108,29 +107,29 @@ const Button = styled.button`
   height: 50px;
   border: none;
   border-radius: 10px;
-  background-color: #F6BD60;
+  background-color: #f6bd60;
   box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-  font-family: 'SCDream7';
+  font-family: "SCDream7";
   color: white;
   font-size: 26px;
   cursor: pointer;
 `;
 
 const GenderButton = styled.button`
-padding: 10px 20px;
-margin-right: 50px; 
-border: 3px solid #F6BD60;
-border-radius: 10px;
-background-color: ${props => props.isSelected ? '#F6BD60' : '#FFF'};
-color: ${props => props.isSelected ? 'white' : '#F6BD60'};
-font-family: 'SCDream6';
-font-size: 16px;
-cursor: pointer;
-outline: none;
-width: 275px;
-&:last-child {
-  margin-right: 0;
-}
+  padding: 10px 20px;
+  margin-right: 50px;
+  border: 3px solid #f6bd60;
+  border-radius: 10px;
+  background-color: ${(props) => (props.isSelected ? "#F6BD60" : "#FFF")};
+  color: ${(props) => (props.isSelected ? "white" : "#F6BD60")};
+  font-family: "SCDream6";
+  font-size: 16px;
+  cursor: pointer;
+  outline: none;
+  width: 275px;
+  &:last-child {
+    margin-right: 0;
+  }
 `;
 
 function CarePostPage() {
@@ -144,15 +143,28 @@ function CarePostPage() {
     postcontent: "",
   });
 
-  const [selectedGender, setSelectedGender] = useState('');
+  const [selectedGender, setSelectedGender] = useState("");
+  const [pets, setPets] = useState([]);
+  const userId = JSON.parse(localStorage.getItem("userInfo")).userId;
 
-  const handleGenderSelect = (gender) => {
-    setSelectedGender(gender);
-    setFormData({
-      ...formData,
-      gender: gender,
-    });
-  };
+  useEffect(() => {
+    const fetchPets = async () => {
+      try {
+        const response = await axios.get(
+          `http://localhost:8080/api/pet/list?userId=${userId}`
+        );
+        if (response.status === 200) {
+          setPets(response.data);
+        } else {
+          console.error("Failed to fetch pets");
+        }
+      } catch (error) {
+        console.error("Error fetching pets:", error);
+      }
+    };
+
+    fetchPets();
+  }, []);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -162,97 +174,139 @@ function CarePostPage() {
     });
   };
 
+  const handleGenderSelect = (gender) => {
+    setSelectedGender(gender);
+    setFormData({
+      ...formData,
+      gender: gender,
+    });
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const url = '';
+    const helperSex =
+      formData.gender === "male"
+        ? false
+        : formData.gender === "female"
+        ? true
+        : null;
 
-    const form = new FormData();
-    form.append('info', JSON.stringify(formData));
+    const postPayload = {
+      userId: userId,
+      petId: parseInt(formData.petselect),
+      title: formData.posttitle,
+      content: formData.postcontent,
+      periodStart: formData.firstdate,
+      periodEnd: formData.lastdate,
+      helperSex: helperSex,
+    };
 
     try {
-      const response = await axios.post(url, form, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
-      });
+      const response = await axios.post(
+        "http://localhost:8080/api/post/create",
+        postPayload,
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
 
-      if (response.status === 200) {
-        
-        localStorage.setItem('userInfo', JSON.stringify(response.data.data));
-        navigate('/');
+      if (response.status === 200 || response.status === 201) {
+        navigate("/");
       } else {
-        console.error('post failed');
+        console.error("Failed to create post", response);
       }
     } catch (error) {
-      console.error('Error during signup:', error);
+      console.error("Error creating post:", error);
+      alert("Error creating post");
     }
   };
 
   return (
     <PageContainer>
-      <PowContaioner><Paw src="/images/paw.png" alt="paw"  /><Title>돌봄글 기본정보</Title></PowContaioner>
+      <PowContaioner>
+        <Paw src="/images/paw.png" alt="paw" />
+        <Title>돌봄글 기본정보</Title>
+      </PowContaioner>
       <Underline />
-        <form onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit}>
         <Box>
           <InputWrapper>
             <TextInput>돌봄 요청 기간</TextInput>
             <DateSelect>
-            <InputDate
-              type="date"
-              name="firstdate"
-              value={formData.firstdate}
-              onChange={handleChange}
-            /><Inputa>~</Inputa>
-            <InputDate
-              type="date"
-              name="lastdate"
-              value={formData.lastdate}
-              onChange={handleChange}
-            />
+              <InputDate
+                type="date"
+                name="firstdate"
+                value={formData.firstdate}
+                onChange={handleChange}
+              />
+              <Inputa>~</Inputa>
+              <InputDate
+                type="date"
+                name="lastdate"
+                value={formData.lastdate}
+                onChange={handleChange}
+              />
             </DateSelect>
-            </InputWrapper>
-            <InputWrapper>
+          </InputWrapper>
+          <InputWrapper>
             <TextInput>희망 이웃 성별</TextInput>
             <GenderButton
-            isSelected={selectedGender === 'all'}
-            onClick={() => setSelectedGender('all')}>
+              isSelected={selectedGender === "all"}
+              onClick={() => handleGenderSelect("all")}
+              type="button"
+            >
               모두 괜찮아요
             </GenderButton>
             <GenderButton
-            isSelected={selectedGender === 'male'}
-            onClick={() => setSelectedGender('male')}>
+              isSelected={selectedGender === "male"}
+              onClick={() => handleGenderSelect("male")}
+              type="button"
+            >
               남성만
             </GenderButton>
-            <GenderButton isSelected={selectedGender === 'female'}
-            onClick={() => setSelectedGender('female')}>
+            <GenderButton
+              isSelected={selectedGender === "female"}
+              onClick={() => handleGenderSelect("female")}
+              type="button"
+            >
               여성만
             </GenderButton>
-            </InputWrapper>
-            <InputWrapper>
-            <TextInput>반려동물선택</TextInput>
+          </InputWrapper>
+          <InputWrapper>
+            <TextInput>반려 동물 선택</TextInput>
             <select
-            name="petselect"
-            value={formData.ageRange}
-            onChange={handleChange}
-            style={{
-              padding: '10px',
-              border: '3px solid #f6bd60',
-              borderRadius: '10px',
-              width: '925px',
-              fontSize: '20px',
-              fontFamily: 'SCDream4',
-              marginBottom: '100px',
-            }}>
-              <option value="1">뽀로리</option>
+              name="petselect"
+              value={formData.petselect}
+              onChange={handleChange}
+              style={{
+                padding: "10px",
+                border: "3px solid #f6bd60",
+                borderRadius: "10px",
+                width: "900px",
+                fontSize: "20px",
+                fontFamily: "SCDream4",
+                marginBottom: "100px",
+              }}
+            >
+              {pets.map((pet) => (
+                <option key={pet.petId} value={pet.petId}>
+                  {pet.petName}
+                </option>
+              ))}
             </select>
-            </InputWrapper>
+          </InputWrapper>
         </Box>
-      <PowContaioner><Paw src="/images/paw.png" alt="paw"  /><Title>돌봄글 내용작성</Title></PowContaioner>
-      <Underline />
+        <PowContaioner>
+          <Paw src="/images/paw.png" alt="paw" />
+          <Title>돌봄글 내용작성</Title>
+        </PowContaioner>
+        <Underline />
         <Box>
-        <InputWrapper>
-        <TextInput>돌봄글 제목</TextInput>
+          <InputWrapper>
+            <TextInput>돌봄글 제목</TextInput>
             <Input
               type="text"
               name="posttitle"
@@ -273,9 +327,9 @@ function CarePostPage() {
           </InputWrapper>
           <Button type="submit">글등록</Button>
         </Box>
-        </form>
+      </form>
     </PageContainer>
-  )
+  );
 }
 
-export default CarePostPage
+export default CarePostPage;
