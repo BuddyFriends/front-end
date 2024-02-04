@@ -303,11 +303,11 @@ function PetAddPage() {
                 value={formData.species}
                 onChange={handleInputChange}
               >
-                <option value="강아지">강아지</option>
-                <option value="고양이">고양이</option>
-                <option value="햄스터">햄스터</option>
-                <option value="조류">조류</option>
-                <option value="기타">기타</option>
+                <option value="dog">강아지</option>
+                <option value="cat">고양이</option>
+                <option value="etc">햄스터</option>
+                <option value="etc">조류</option>
+                <option value="etc">기타</option>
               </Select>
               <SmallInput
                 name="type"
