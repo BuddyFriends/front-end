@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
 import axios from 'axios'
 import GridPage from '../components/GridPage'
@@ -191,6 +192,43 @@ function Items({ currentItems }) {
 
 function GalleryPage() {
 
+  const { petId } = useParams();
+  const [petDetails, setPetDetails] = useState(null);
+
+  const [pictures, setPictures] = useState([]);
+
+  useEffect(() => {
+    const fetchPetDetails = async () => {
+      // localStorage에서 userInfo를 가져온 후 userId 추출
+      const userInfo = JSON.parse(localStorage.getItem("userInfo"));
+      const userId = userInfo?.userId;
+
+      try {
+        // petId와 userId를 사용하여 API 호출
+        const response = await axios.get(`http://localhost:8080/api/pet/get`, {
+          params: { userId, petId }
+        });
+        setPetDetails(response.data);
+      } catch (error) {
+        console.error('Failed to fetch pet details:', error);
+      }
+    };
+
+    const fetchPictures = async () => {
+      try {
+        const response = await axios.get(`http://localhost:8080/api/picture/list?petId=${petId}`);
+        setPictures(response.data.map(picture => picture.pictureAdd)); // 사진 URL 추출하여 상태 업데이트
+      } catch (error) {
+        console.error('Failed to fetch pictures:', error);
+      }
+    };
+
+    fetchPetDetails();
+    fetchPictures();
+  }, [petId]);
+
+
+
 
     // 페이지네이션
 /*
@@ -213,7 +251,6 @@ function GalleryPage() {
   };
   
   */
-  
 
 
   return (
@@ -223,13 +260,14 @@ function GalleryPage() {
           <IconTextContainer><Paw src="/images/paw.png" alt="paw" /><Title>반려 버디 프로필</Title></IconTextContainer>
           <Underline/>
         </ColumnContainer>
-        <GalleryProfile/>
+        <GalleryProfile petDetails={petDetails} />
+        {/* 반려동물의 사진을 보여주는 GridPage 컴포넌트에도 petId 또는 petDetails를 전달할 수 있습니다. */}
         <ColumnContainer>
           <IconTextContainer><Paw src="/images/paw.png" alt="paw" /><Title>반려 버디 추억 갤러리</Title></IconTextContainer>
           <Underline/>
         </ColumnContainer>
 
-        <GridPage />
+        <GridPage pictures={pictures} />
 
         {/* <Items currentItems={currentItems} />
         <ReactPaginate

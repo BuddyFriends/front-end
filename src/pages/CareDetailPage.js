@@ -136,13 +136,12 @@ const Arrows = styled.img`
 
 function CareDetailPage() {
 
-  // PetProfileCard 클릭 시 배경색 변경
-  const [selectedCardIndex, setSelectedCardIndex] = useState(null); // 선택된 카드 인덱스
+  const [selectedCardIndex, setSelectedCardIndex] = useState(null);
 
-  // 각 PetProfileCard의 클릭 이벤트 핸들러
   const handleCardClick = (index) => {
-    setSelectedCardIndex(index); // 클릭된 카드의 인덱스를 상태로 저장
+    setSelectedCardIndex(index);
   };
+
 
     // 초기값으로 설정할 해시태그
     const initialHashtags = [
@@ -185,13 +184,15 @@ function CareDetailPage() {
         <ArrowContainer>
           <Arrows src="images/left.png"></Arrows>
         </ArrowContainer>
-        {[0, 1, 2].map((index) => ( // 예시로 3개의 카드를 렌더링
-            <PetProfileCard
-              key={index}
-              isSelected={selectedCardIndex === index} // 현재 카드가 선택된 상태인지 여부
-              onClick={() => handleCardClick(index)} // 클릭 이벤트 핸들러
-            />
-          ))}
+        <PetCardContainer>
+        {[0, 1, 2].map((index) => (
+          <PetProfileCard
+            key={index}
+            isSelected={selectedCardIndex === index}
+            onClick={() => handleCardClick(index)}
+          />
+        ))}
+      </PetCardContainer>
       <ArrowContainer>
           <Arrows src="images/right.png"></Arrows>
         </ArrowContainer>
