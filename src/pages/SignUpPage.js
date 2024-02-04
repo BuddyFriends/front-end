@@ -133,18 +133,27 @@ function SignUpPage() {
     age: "",
     intro: "",
     chat: "",
+    grade: "",
   });
 
   const [selectedGender, setSelectedGender] = useState("");
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData((prevState) => ({
-      ...prevState,
-      [name]: value,
-    }));
+  
+    if (name === "grade") {
+      setFormData((prevState) => ({
+        ...prevState,
+        grade: value, 
+      }));
+    } else {
+      setFormData((prevState) => ({
+        ...prevState,
+        [name]: value,
+      }));
+    }
   };
-
+  
   const handleGenderSelect = (gender, e) => {
     e.preventDefault(); 
     setSelectedGender(gender);
@@ -168,7 +177,7 @@ function SignUpPage() {
       intro: formData.intro,
       chat: formData.chat,
       smell: 4,
-      grade: "마스터",
+      grade: formData.grade,
     };
 
     const url = "http://localhost:8080/api/user/join";
@@ -288,6 +297,26 @@ function SignUpPage() {
             </select>
           </InputWrapper>
           <InputWrapper>
+            <TextInput>반려동물과 함께한 년수</TextInput>
+            <select
+              name="grade"
+              value={formData.grade}
+              onChange={handleChange}
+              style={{
+                padding: "10px",
+                border: "3px solid #f6bd60",
+                borderRadius: "10px",
+                width: "575px",
+                fontSize: "20px",
+                fontFamily: "SCDream4",
+              }}
+            >
+              <option value="비기너">1년 이하</option>
+              <option value="노말">1년 ~ 3년</option>
+              <option value="마스터">3년 이상</option>
+            </select>
+          </InputWrapper>
+          <InputWrapper>
             <TextInput>한 줄 소개</TextInput>
             <Input
               type="text"
@@ -302,7 +331,7 @@ function SignUpPage() {
             <Input
               type="text"
               name="chat"
-              placeholder="카카오톡 오픈프로필 링크를 입력해주세요."
+              placeholder="카카오톡 오픈프로필 생성 후 링크를 입력해주세요."
               value={formData.chat}
               onChange={handleChange}
             />
