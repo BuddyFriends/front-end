@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
+import Inform from "../assets/icons/information.png";
 
 const InputWrapper = styled.div`
   margin-bottom: 30px;
@@ -20,6 +21,25 @@ const TextInput = styled.p`
   font-size: 24px;
   font-family: "SCDream5";
   color: #010c26;
+`;
+
+const InformContainer = styled.div`
+  display: flex;
+  // to right
+  justify-content: flex-end;
+  margin-bottom: 20px;
+`;
+
+const InformText = styled.p`
+  margin: 0px 0px 0px 10px;
+  font-size: 16px;
+  font-family: "SCDream4";
+  color: #010c26;
+`;
+
+const InformIcon = styled.img`
+  width: 20px;
+  height: 20px;
 `;
 
 function AddressInput({ formData, handleChange }) {
@@ -88,6 +108,10 @@ function AddressInput({ formData, handleChange }) {
         }}
         disabled={!loaded}
       />
+      <InformContainer>
+        <InformIcon src={Inform} />
+        <InformText>회원가입 당시 현재 위치를 기준으로 합니다. 회원가입 후 수정 가능합니다.</InformText>
+      </InformContainer>
     </InputWrapper>
   );
 }
