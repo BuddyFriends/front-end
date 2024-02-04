@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
+import axios from 'axios';
 
 const GridContainer = styled.div`
   display: grid;
@@ -20,7 +21,7 @@ const Image = styled.img`
   max-height: 100%;
 `;
 
-function GridPage() {
+function GridPage({ pictures }) {
   const images = [
     "/images/dummyImage.png",
     "/images/dummyImage.png",
@@ -33,9 +34,12 @@ function GridPage() {
     "/images/dummyImage.png",
   ];
 
+  const dummyImages = new Array(9).fill("/images/dummyImage.png");
+  const displayImages = pictures.length < 9 ? [...pictures, ...dummyImages.slice(pictures.length)] : pictures.slice(0, 9);
+
   return (
     <GridContainer>
-      {images.map((image, index) => (
+      {displayImages.map((image, index) => (
         <GridItem key={index}>
           <Image src={image} alt={`Image ${index}`} />
         </GridItem>

@@ -1,7 +1,10 @@
 import React, { useState, useEffect } from 'react';
+import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
+import axios from 'axios'
 import GridPage from '../components/GridPage'
 import ProfileInfo from '../components/ProfileInfo';
+import GalleryProfile from '../components/GalleryProfile';
 import { useNavigate } from "react-router-dom";
 import ReactPaginate from 'react-paginate';
 
@@ -12,7 +15,6 @@ const ProfileContainer = styled.div`
   align-items: center;
   background-color: #f8edeb;
   padding: 100px;
-  margin-bottom: 20px;
 `;
 
 /* 
@@ -188,26 +190,45 @@ function Items({ currentItems }) {
 */
 
 
-function GalleryPage({ itemsPerPage }) {
+function GalleryPage() {
 
-      // 초기값으로 설정할 해시태그
-      const initialHashtags = [
-        '#애교둥이',
-        '#간식을사랑해',
-        '#먹보',
-        '#가끔은새침해요',
-        '#산책하고뛰는걸좋아해요',
-      ];
-  
-      // 해시태그를 저장할 상태와, 서버에서 받아온 값을 저장할 상태
-    const [hashtags, setHashtags] = useState(initialHashtags);
-    const [serverHashtags, setServerHashtags] = useState([]);
-  
-    // 서버에서 값을 받아와서 hashtags 업데이트
-    useEffect(() => {
-      // 서버에서 값 받아오는 로직
-      // 예시: fetch('서버 API 주소').then(response => response.json()).then(data => setServerHashtags(data));
-    }, []);
+  const { petId } = useParams();
+  const [petDetails, setPetDetails] = useState(null);
+
+  const [pictures, setPictures] = useState([]);
+
+  useEffect(() => {
+    const fetchPetDetails = async () => {
+      // localStorage에서 userInfo를 가져온 후 userId 추출
+      const userInfo = JSON.parse(localStorage.getItem("userInfo"));
+      const userId = userInfo?.userId;
+
+      try {
+        // petId와 userId를 사용하여 API 호출
+        const response = await axios.get(`http://localhost:8080/api/pet/get`, {
+          params: { userId, petId }
+        });
+        setPetDetails(response.data);
+      } catch (error) {
+        console.error('Failed to fetch pet details:', error);
+      }
+    };
+
+    const fetchPictures = async () => {
+      try {
+        const response = await axios.get(`http://localhost:8080/api/picture/list?petId=${petId}`);
+        setPictures(response.data.map(picture => picture.pictureAdd)); // 사진 URL 추출하여 상태 업데이트
+      } catch (error) {
+        console.error('Failed to fetch pictures:', error);
+      }
+    };
+
+    fetchPetDetails();
+    fetchPictures();
+  }, [petId]);
+
+
+
 
     // 페이지네이션
 /*
@@ -230,7 +251,6 @@ function GalleryPage({ itemsPerPage }) {
   };
   
   */
-  
 
 
   return (
@@ -240,41 +260,14 @@ function GalleryPage({ itemsPerPage }) {
           <IconTextContainer><Paw src="/images/paw.png" alt="paw" /><Title>반려 버디 프로필</Title></IconTextContainer>
           <Underline/>
         </ColumnContainer>
-
-        <CardContainer>
-          <ProfileCard1Container>
-          <CircleContainer>
-            <CircleImage src="/images/petProfile.png"/>
-          </CircleContainer>
-          <Title>뽀로리</Title>
-          </ProfileCard1Container>
-
-          <ProfileCard2Container>
-          <ProfileDetailGridContainer>
-            <ProfileInfo label="나이" value="3" />
-            <ProfileInfo label="품종" value="비숑" />
-            <ProfileInfo label="좋아하는 것" value="고구마" />
-            <ProfileInfo label="싫어하는 것" value="꼬집기" />
-            <ProfileInfo label="복용약" value="없음" />
-          </ProfileDetailGridContainer>
-          <HashtagContainer>
-            {/* 초기값 또는 서버에서 받아온 값으로 매핑 */}
-            {serverHashtags.length > 0 ? serverHashtags.map((tag, index) => (
-              <Hashtag key={index}>{tag}</Hashtag>
-            )) : hashtags.map((tag, index) => (
-              <Hashtag key={index}>{tag}</Hashtag>
-            ))}
-        </HashtagContainer>
-          </ProfileCard2Container>
-
-        </CardContainer>
-
+        <GalleryProfile petDetails={petDetails} />
+        {/* 반려동물의 사진을 보여주는 GridPage 컴포넌트에도 petId 또는 petDetails를 전달할 수 있습니다. */}
         <ColumnContainer>
           <IconTextContainer><Paw src="/images/paw.png" alt="paw" /><Title>반려 버디 추억 갤러리</Title></IconTextContainer>
           <Underline/>
         </ColumnContainer>
 
-        <GridPage />
+        <GridPage pictures={pictures} />
 
         {/* <Items currentItems={currentItems} />
         <ReactPaginate

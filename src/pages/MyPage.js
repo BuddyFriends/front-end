@@ -3,6 +3,7 @@ import styled from "styled-components";
 import UserInfo from "../components/UserInfo";
 import PetAdd from "../components/PetAdd";
 import ProfileComponent from "../components/ProfileComponent";
+import { useNavigate } from "react-router-dom";
 
 const PageContainer = styled.div`
   display: flex;
@@ -49,6 +50,8 @@ const AddPetContainer = styled.div`
 `;
 
 function MyPage() {
+  const navigate = useNavigate();
+  
   const [petData, setPetData] = useState([]);
   const userId = JSON.parse(localStorage.getItem("userInfo")).userId;
 
@@ -87,8 +90,10 @@ function MyPage() {
       </TitleContainer>
       <HorizontalLine />
       <AddPetContainer>
-        {petData.map((pet) => (
-          <PetAdd key={pet.petId} imageSrc={pet.petImage} name={pet.petName} />
+      {petData.map((pet) => (
+        <div key={pet.petId} onClick={() => navigate(`/gallery/${pet.petId}`)}>
+        <PetAdd imageSrc={pet.petImage} name={pet.petName} />
+        </div>
         ))}
         <PetAdd imageSrc="" name="새로운 반려동물 등록" />
       </AddPetContainer>
