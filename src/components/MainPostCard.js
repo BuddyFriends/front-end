@@ -15,15 +15,15 @@ const StyledProfile = styled.div`
 `;
 
 const ProfileImage = styled.img`
-  width: 190px;
-  height: 190px;
+  width: 180px;
+  height: 180px;
   border-radius: 50%;
-  margin-bottom: 20px;
+  margin-bottom: 30px;
 `;
 
 const PetName = styled.div`
   font-size: 24px;
-  margin-bottom: 10px;
+  margin-bottom: 15px;
 `;
 
 const Date = styled.div`
@@ -31,7 +31,7 @@ const Date = styled.div`
   color: gray;
 `;
 
-function MainPostCard({ imageSrc, petName, date }) {
+function MainPostCard({ petImage, petName, periodStart, periodEnd }) {
   const navigate = useNavigate();
 
   const handleProfileClick = () => {
@@ -40,9 +40,9 @@ function MainPostCard({ imageSrc, petName, date }) {
 
   return (
     <StyledProfile onClick={handleProfileClick}>
-      <ProfileImage src={imageSrc} alt="Profile" />
+      <ProfileImage src={petImage} alt="Profile" />
       <PetName>{petName}</PetName>
-      <Date>{date}</Date>
+      <Date>{periodStart} ~ {periodEnd}</Date>
     </StyledProfile>
   );
 };

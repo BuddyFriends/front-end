@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
 import MainPostCard from "../components/MainPostCard";
@@ -171,7 +171,8 @@ const Arrows = styled.img`
 function MainPage() {
   const navigate = useNavigate();
 
-  const [species, setSpecies] = useState("");
+  const [species, setSpecies] = useState("dog");
+  const [posts, setPosts] = useState([]);
 
   const handleSpeciesClick = (newSpecies) => {
     setSpecies(newSpecies);
@@ -185,12 +186,6 @@ function MainPage() {
     navigate("/caredetail");
   };
 
-  const profilesData = [
-    { imageSrc: "/images/cat.png", petName: "냥이1", date: "2022-02-01" },
-    { imageSrc: "/images/cat.png", petName: "냥이2", date: "2022-02-02" },
-    { imageSrc: "/images/cat.png", petName: "냥이3", date: "2022-02-03" },
-  ];
-
   const [startIndex, setStartIndex] = useState(0);
 
   const handleLeftArrowClick = () => {
@@ -199,9 +194,28 @@ function MainPage() {
 
   const handleRightArrowClick = () => {
     setStartIndex((prevIndex) =>
-      Math.min(prevIndex + 3, profilesData.length - 1)
+      Math.min(prevIndex + 3, 1)
     );
   };
+
+  useEffect(() => {
+    const fetchPosts = async (species) => {
+      try {
+        const response = await fetch(`http://localhost:8080/api/post/bySpecies/${species}`);
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        const data = await response.json();
+        setPosts(data);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    if (species) {
+      fetchPosts(species);
+    }
+  }, [species]);
 
   return (
     <PageContainer>
@@ -251,16 +265,19 @@ function MainPage() {
             </CircleContainer>
           </CircleButton>
         </Image2Container>
-
-        <ProfileContainer>
-          <Arrows src="/images/left.png" onClick={handleLeftArrowClick} />
-          {profilesData
-            .slice(startIndex, startIndex + 3)
-            .map((profile, index) => (
-              <MainPostCard key={index} {...profile} />
-            ))}
-          <Arrows src="/images/right.png" onClick={handleRightArrowClick} />
-        </ProfileContainer>
+      <ProfileContainer>
+        <Arrows src="/images/left.png" onClick={handleLeftArrowClick} />
+        {posts.slice(startIndex, startIndex + 3).map((post) => (
+          <MainPostCard
+            key={post.postId}
+            petImage={post.petId.petImage}
+            petName={post.petId.petName}
+            periodStart={post.periodStart}
+            periodEnd={post.periodEnd}
+          />
+        ))}
+        <Arrows src="/images/right.png" onClick={handleRightArrowClick} />
+      </ProfileContainer>
       </CareContainer>
     </PageContainer>
   );
