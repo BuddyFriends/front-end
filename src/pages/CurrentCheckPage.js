@@ -9,7 +9,7 @@ const PageContainer = styled.div`
   align-items: center;
 `;
 
-const PowContaioner = styled.div`
+const PowContainer = styled.div`
   display: flex;
   margin-top: 50px;
   width: 1200px;
@@ -17,7 +17,7 @@ const PowContaioner = styled.div`
 
 const Paw = styled.img`
   width: 38px;
-  height: 38px;
+  height: 30px;
   margin-right: 20px;
   padding-top: 20px;
 `;
@@ -81,10 +81,10 @@ function CurrentCheckPage() {
 
   return (
     <PageContainer>
-      <PowContaioner>
+      <PowContainer>
         <Paw src="/images/paw.png" alt="paw" />
         <Title>돌봄 로그</Title>
-      </PowContaioner>
+      </PowContainer>
       <Underline />
       <InputWrapper>
         <TextInput>돌봄 진행 현황</TextInput>

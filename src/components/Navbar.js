@@ -10,7 +10,7 @@ const NavContainer = styled.nav`
   padding: 0px 20px;
   background-color: #f6bd60;
   font-family: "SCDream5";
-  font-size: 19px;
+  font-size: 22px;
 `;
 
 const TextLink = styled(Link)`
@@ -23,7 +23,7 @@ const NavItems = styled.div`
 `;
 
 const NavPageItem = styled.div`
-  margin: 0 8rem;
+  margin: 0 12rem;
   cursor: pointer;
   color: #000;
 `;
@@ -61,7 +61,7 @@ const Navber = () => {
             alt={"Logo"}
             style={{
               width: "auto",
-              height: "60px",
+              height: "70px",
               marginRight: "20px",
               marginTop: "5px",
             }}
@@ -70,7 +70,7 @@ const Navber = () => {
         <TextLink to="/carepost">
           <NavPageItem>게시글 작성</NavPageItem>
         </TextLink>
-        <TextLink to="/gallery">
+        <TextLink to="/gallery/1">
           <NavPageItem>갤러리</NavPageItem>
         </TextLink>
         <TextLink to="/check">

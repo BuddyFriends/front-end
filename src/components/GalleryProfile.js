@@ -13,7 +13,7 @@ const CardContainer = styled.div`
   background-color: #F9DCC4;
   margin-Top : 50px;
   margin-Bottom : 100px;
-  padding: 30px 30px 10px 10px;
+  padding: 30px 30px 30px 10px;
 `;
 
 const ProfileCard1Container = styled.div`
@@ -35,7 +35,7 @@ const CircleContainer = styled.div`
   margin-Top : 30px;
   margin-left: 50px;
   margin-Right: 50px;
-  margin-Bottom : 30px;
+  margin-Bottom : 10px;
 `;
 
 const CircleImage = styled.img`
