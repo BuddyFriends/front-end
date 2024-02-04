@@ -36,15 +36,15 @@ const LogoImage = styled.img`
 `;
 
 const TitleContent = styled.p`
-  margin: 0px 0px 10px 0px;
-  font-size: 20px;
+  margin: 0px 0px 30px 0px;
+  font-size: 24px;
   font-family: 'SCDream7';
   color: #000;
 `;
 
 const TextContent = styled.p`
-  margin: 0;
-  font-size: 18px;
+  margin: 3px 0px 10px 0px;
+  font-size: 20px;
   font-family: 'SCDream4';
   color: #000;
 `;

@@ -171,7 +171,7 @@ const Arrows = styled.img`
 function MainPage() {
   const navigate = useNavigate();
 
-  const [species, setSpecies] = useState("dog");
+  const [species, setSpecies] = useState("all");
   const [posts, setPosts] = useState([]);
 
   const handleSpeciesClick = (newSpecies) => {
@@ -201,7 +201,7 @@ function MainPage() {
   useEffect(() => {
     const fetchPosts = async (species) => {
       try {
-        const response = await fetch(`http://localhost:8080/api/post/bySpecies/${species}`);
+        const response = await fetch(`http://localhost:8080/api/post/bySpecies?species=${species}`);
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
         }
