@@ -44,7 +44,7 @@ const Navber = () => {
   const handleLogout = async () => {
     try {
       // http://localhost:8080/api/user/logout?userId=userInfo.userId
-      const response = await fetch(`http://localhost:8080/api/user/logout?userId=${userInfo.userId}`);
+      // const response = await fetch(`http://localhost:8080/api/user/logout?userId=${userInfo.userId}`);
       localStorage.removeItem('userInfo');
       setUserInfo(null);
     } catch (error) {

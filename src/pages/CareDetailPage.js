@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import axios from 'axios';
+import { useParams } from 'react-router-dom';
 import ProfileCard from '../components/ProfileCard';
 import PetProfileCard from '../components/PetProfileCard';
 
@@ -142,25 +143,94 @@ function CareDetailPage() {
     setSelectedCardIndex(index);
   };
 
+    const [currentUser, setCurrentUser] = useState(null);
 
-    // 초기값으로 설정할 해시태그
-    const initialHashtags = [
-      '#애교둥이',
-      '#간식을사랑해',
-      '#먹보',
-      '#가끔은새침해요',
-      '#산책하고뛰는걸좋아해요',
-    ];
-
-    // 해시태그를 저장할 상태와, 서버에서 받아온 값을 저장할 상태
-  const [hashtags, setHashtags] = useState(initialHashtags);
-  const [serverHashtags, setServerHashtags] = useState([]);
-
-  // 서버에서 값을 받아와서 hashtags 업데이트
+  // 현재 로그인한 사용자 정보 가져오기
   useEffect(() => {
-    // 서버에서 값 받아오는 로직
-    // 예시: fetch('서버 API 주소').then(response => response.json()).then(data => setServerHashtags(data));
+    // 예시: 로컬 스토리지에서 사용자 정보 가져오기
+    const userInfo = JSON.parse(localStorage.getItem('userInfo'));
+    if (userInfo && userInfo.userId) {
+      setCurrentUser(userInfo.userId);
+    }
   }, []);
+
+  const { postId } = useParams();
+  const [postDetails, setPostDetails] = useState(null);
+  const [petDetails, setPetDetails] = useState(null);
+  const [isApplied, setIsApplied] = useState(false); // 신청 완료 상태 추가
+  const [applicants, setApplicants] = useState([]); // 신청자 목록 상태 추가
+
+
+
+  useEffect(() => {
+    async function fetchDetails() {
+      try {
+        // 게시글 상세 정보 가져오기
+        const postResponse = await axios.get(`http://localhost:8080/api/post/detail`, { params: { postId } });
+        setPostDetails(postResponse.data);
+
+        // 반려동물 상세 정보 가져오기
+        const petResponse = await axios.get(`http://localhost:8080/api/pet/get`, { params: { userId: postResponse.data.userId, petId: postResponse.data.petId } });
+        setPetDetails(petResponse.data);
+      } catch (error) {
+        console.error('Failed to fetch details:', error);
+      }
+    }
+
+    fetchDetails();
+  }, [postId]);
+
+  // 게시글 작성자와 현재 로그인한 사용자가 같은지 확인
+  // const isAuthor = currentUser === postDetails?.userId?.userId;
+  const isAuthor = currentUser === postDetails?.userId;
+
+  // 신청하기 함수
+  const handleApply = async () => {
+    const applyData = {
+      postId: postId,
+      userId: currentUser,
+    };
+
+    try {
+      await axios.post('http://localhost:8080/api/applicant/apply', applyData, {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+      alert('신청이 완료되었습니다.');
+      setIsApplied(true); // 신청 완료 상태 업데이트
+    } catch (error) {
+      console.error('신청하기 실패:', error);
+      alert('신청하기에 실패했습니다.');
+    }
+  };
+
+  // 게시글 상세 정보 및 반려동물 정보 불러오기와 동일한 useEffect 내부 또는 별도의 useEffect 사용
+  useEffect(() => {
+    const fetchApplicants = async () => {
+      try {
+        const response = await axios.get(`http://localhost:8080/api/applicant/list`, {
+          params: { postId: postId },
+        });
+        setApplicants(response.data); // 신청자 목록 상태 업데이트
+      } catch (error) {
+        console.error('신청자 정보 불러오기 실패:', error);
+      }
+    };
+
+    if (isAuthor) { // 게시글 작성자만 신청자 목록을 불러옴
+      fetchApplicants();
+    }
+  }, [postId, isAuthor]);
+
+  const [selectedApplicantId, setSelectedApplicantId] = useState(null); // 선택된 신청자 ID 상태
+
+  // 신청자 선택 핸들러
+  const handleApplicantSelect = (applicantId) => {
+    setSelectedApplicantId(applicantId);
+  };
+
+  
 
   return (
     <div>
@@ -168,39 +238,58 @@ function CareDetailPage() {
       <ColumnContainer>
       <IconTextContainer>
         <BigIcon src="/images/paw.png" alt="paw" />
-        <Title>이름 돌봄 부탁드립니다.</Title>
+        <Title>{postDetails ? postDetails.title : "Loading..."}</Title>
       </IconTextContainer>
       <LongUnderline/>
       </ColumnContainer>
-      <ProfileCard/>
+      {postDetails && petDetails ? (
+        <ProfileCard postDetails={postDetails} petDetails={petDetails} />
+      ) : (
+        <div>Loading...</div>
+      )}
       <LongUnderline/>
 
       <Textarea>
-        <TextContent>* 우리 뽀로리를 맡아주실 분을 구합니다.<br/>산책을 매우 좋아하고 온순한 강아지입니다.</TextContent>
+        <TextContent>{postDetails ? postDetails.content : "Loading..."}</TextContent>
       </Textarea>
       <LongUnderline/>
+      {isAuthor && (
       <UnderContainer>
       <PetCardContainer>
-        <ArrowContainer>
-          <Arrows src="images/left.png"></Arrows>
-        </ArrowContainer>
-        <PetCardContainer>
-        {[0, 1, 2].map((index) => (
-          <PetProfileCard
-            key={index}
-            isSelected={selectedCardIndex === index}
-            onClick={() => handleCardClick(index)}
-          />
-        ))}
-      </PetCardContainer>
       <ArrowContainer>
-          <Arrows src="images/right.png"></Arrows>
-        </ArrowContainer>
+        <Arrows src="/images/left.png" alt="left arrow" />
+      </ArrowContainer>
+      {applicants.map((applicant) => (
+              <PetProfileCard
+                key={applicant.id}
+                applicant={applicant}
+                isSelected={selectedApplicantId === applicant.id} // 선택 상태 prop 전달
+                onClick={() => handleApplicantSelect(applicant.id)} // 클릭 핸들러 prop 전달
+              />
+            ))}
+      <ArrowContainer>
+        <Arrows src="/images/right.png" alt="right arrow" />
+      </ArrowContainer>
       </PetCardContainer>
-      </UnderContainer>
-      <ButtonContainer>
+    </UnderContainer>
+    )}
+
+      {/* <ButtonContainer>
         <Button type="submit">신청하기</Button>
-      </ButtonContainer>
+      </ButtonContainer> */}
+      {/* 버튼 텍스트 조건부 렌더링 */}
+      {/* <ButtonContainer>
+        <Button type="button">{isAuthor ? '확정하기' : '신청하기'}</Button>
+      </ButtonContainer> */}
+              <ButtonContainer>
+          <Button
+            type="button"
+            onClick={!isAuthor && !isApplied ? handleApply : undefined}
+            disabled={isApplied} // 신청 완료 상태에서 버튼 비활성화
+          >
+            {isAuthor ? '확정하기' : isApplied ? '신청완료' : '신청하기'}
+          </Button>
+        </ButtonContainer>
 
     </ProfileContainer>
     </div>

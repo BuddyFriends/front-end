@@ -107,47 +107,11 @@ const SmallIcon = styled.img`
 `;
 
 
-const ProfileCard = () => {
-  const [petData, setPetData] = useState([]); // 반려동물 데이터를 저장할 상태
+const ProfileCard = ({ postDetails, petDetails }) => {
+    // 태그 문자열을 # 기준으로 분리하여 배열로 변환
+  // 문자열 시작에 #이 오는 경우, 첫 번째 요소가 빈 문자열이 되므로 filter(Boolean)으로 빈 문자열 제거
+  const tags = petDetails?.tag ? petDetails.tag.split("#").filter(Boolean) : [];
 
-  // 로컬 스토리지에서 userInfo 가져오기
-  const userInfo = JSON.parse(localStorage.getItem('userInfo'));
-  const userId = userInfo ? userInfo.userId : null;
-
-  useEffect(() => {
-    const fetchPetData = async () => {
-
-      if (userId) {
-        try {
-          // axios를 사용하여 서버 요청
-          const response = await axios.get(`http://localhost:8080/api/pet/list`, {
-            params: {
-              userId: userId // 쿼리 파라미터로 userId 전달
-            }
-          });
-          setPetData(response.data); // 받아온 데이터로 상태 업데이트
-        } catch (error) {
-          console.error('Error fetching pet data:', error);
-        }
-      }
-    };
-
-    fetchPetData();
-  }, []);
-
-
-  // 초기값으로 설정할 해시태그
-  const initialHashtags = [
-    '#애교둥이',
-    '#간식을사랑해',
-    '#먹보',
-    '#가끔은새침해요',
-    '#산책하고뛰는걸좋아해요',
-  ];
-
-  // 해시태그를 저장할 상태와, 서버에서 받아온 값을 저장할 상태
-  const [hashtags, setHashtags] = useState(initialHashtags);
-  const [serverHashtags, setServerHashtags] = useState([]);
 
   // 서버에서 값을 받아와서 hashtags 업데이트
   useEffect(() => {
@@ -160,14 +124,14 @@ const ProfileCard = () => {
       <CardTopContainer>
         <TextContainer>
           <SmallIcon src="/images/calendar_ic.png" alt="calendar" />
-          <ProfileText>2024-01-28</ProfileText>
+          <ProfileText>{postDetails.periodStart}</ProfileText>
           <ProfileText>&nbsp;~&nbsp;</ProfileText>
-          <ProfileText>2024-01-31</ProfileText>
+          <ProfileText>{postDetails.periodEnd}</ProfileText>
         </TextContainer>
 
         <TextContainer>
           <SmallIcon src="/images/people_ic.png" alt="people" />
-          <ProfileText>여성만</ProfileText>
+          <ProfileText>{postDetails ? (postDetails.helperSex ? "남성만" : "여성만") : "로딩 중..."}</ProfileText>
         </TextContainer>
         <ShortUnderline/>
       </CardTopContainer>
@@ -175,26 +139,24 @@ const ProfileCard = () => {
         <CardBottomContainer>
           <ProfileCard1Container>
             <CircleContainer>
-              <CircleImage src="/images/petProfile.png" alt="CareDetailpetProfile"></CircleImage>
+              <CircleImage src={petDetails.petImage} alt={petDetails.petName}></CircleImage>
             </CircleContainer>
           </ProfileCard1Container>
 
           <ProfileCard2Container>
           <ProfileDetailGridContainer>
-            <ProfileInfo label="나이" value="3" />
-            <ProfileInfo label="품종" value="비숑" />
-            <ProfileInfo label="좋아하는 것" value="고구마" />
+            <ProfileInfo label="나이" value={petDetails.petAge} />
+            <ProfileInfo label="품종" value={petDetails.petName} />
+            <ProfileInfo label="좋아하는 것" value={petDetails.petLike} />
             <ProfileInfo label="싫어하는 것" value="꼬집기" />
             <ProfileInfo label="복용약" value="없음" />
           </ProfileDetailGridContainer>
 
           <HashtagContainer>
-            {/* 초기값 또는 서버에서 받아온 값으로 매핑 */}
-            {serverHashtags.length > 0 ? serverHashtags.map((tag, index) => (
-              <Hashtag key={index}>{tag}</Hashtag>
-            )) : hashtags.map((tag, index) => (
-              <Hashtag key={index}>{tag}</Hashtag>
-            ))}
+            {/* 태그 배열을 매핑하여 Hashtag 컴포넌트로 변환 */}
+            {tags.map((tag, index) => (
+              <Hashtag key={index}>#{tag}</Hashtag>
+          ))}
         </HashtagContainer>
           </ProfileCard2Container>
         </CardBottomContainer>
