@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
+import axios from 'axios';
 import ProfileInfo from '../components/ProfileInfo';
 
 const ModalWrapper = styled.div`
@@ -135,7 +136,7 @@ const ShortUnderline = styled.div`
 `;
 
 
-const ProfileModal = ({ onClose, startDate, endDate, imageSrc }) => {
+const ProfileModal = ({ onClose, startDate, endDate, imageSrc, userId, petId, helperSex }) => {
 
   // 초기값으로 설정할 해시태그
   const initialHashtags = [
@@ -155,6 +156,37 @@ const ProfileModal = ({ onClose, startDate, endDate, imageSrc }) => {
     // 서버에서 값 받아오는 로직
     // 예시: fetch('서버 API 주소').then(response => response.json()).then(data => setServerHashtags(data));
   }, []);
+
+  const [petDetails, setPetDetails] = useState(null);
+
+  useEffect(() => {
+    async function fetchDetails() {
+      try {
+        // 반려동물 상세 정보 가져오기
+        const petResponse = await axios.get(`http://localhost:8080/api/pet/get`, { params: { userId: userId, petId: petId } });
+        setPetDetails(petResponse.data);
+      } catch (error) {
+        console.error('Failed to fetch details:', error);
+      }
+    }
+
+    fetchDetails();
+  }, []);
+
+  const tags = petDetails?.tag ? petDetails.tag.split("#").filter(Boolean) : [];
+
+  const getHelperSexText = (helperSex) => {
+    switch (helperSex) {
+      case "male":
+        return "남성만";
+      case "female":
+        return "여성만";
+      case "all":
+        return "모두 괜찮아요";
+      default:
+        return "정보 없음";
+    }
+  };
   
   return (
     <ModalWrapper>
@@ -169,7 +201,7 @@ const ProfileModal = ({ onClose, startDate, endDate, imageSrc }) => {
 
         <TextContainer>
           <SmallIcon src="/images/people_ic.png" alt="people" />
-          <ProfileText>여성만</ProfileText>
+          <ProfileText>{getHelperSexText(helperSex)}</ProfileText>
         </TextContainer>
         <ShortUnderline/>
       </CardTopContainer>
@@ -183,20 +215,18 @@ const ProfileModal = ({ onClose, startDate, endDate, imageSrc }) => {
 
           <ProfileCard2Container>
           <ProfileDetailGridContainer>
-            <ProfileInfo label="나이" value="3" />
-            <ProfileInfo label="품종" value="비숑" />
-            <ProfileInfo label="좋아하는 것" value="고구마" />
-            <ProfileInfo label="싫어하는 것" value="꼬집기" />
-            <ProfileInfo label="복용약" value="없음" />
+            <ProfileInfo label="나이" value={petDetails?.petAge} />
+            <ProfileInfo label="품종" value={petDetails?.type} />
+            <ProfileInfo label="좋아하는 것" value={petDetails?.petLike} />
+            <ProfileInfo label="싫어하는 것" value={petDetails?.petDislike} />
+            <ProfileInfo label="복용약" value={petDetails?.medicine} />
           </ProfileDetailGridContainer>
 
           <HashtagContainer>
-            {/* 초기값 또는 서버에서 받아온 값으로 매핑 */}
-            {serverHashtags.length > 0 ? serverHashtags.map((tag, index) => (
-              <Hashtag key={index}>{tag}</Hashtag>
-            )) : hashtags.map((tag, index) => (
-              <Hashtag key={index}>{tag}</Hashtag>
-            ))}
+            {/* 태그 배열을 매핑하여 Hashtag 컴포넌트로 변환 */}
+            {tags.map((tag, index) => (
+              <Hashtag key={index}>#{tag}</Hashtag>
+          ))}
         </HashtagContainer>
           </ProfileCard2Container>
         </CardBottomContainer>

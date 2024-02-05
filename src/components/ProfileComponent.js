@@ -138,7 +138,7 @@ const After=styled.div`
   color: #878787;
 `;
 
-const ProfileComponent = ({ postId, petId, imageSrc, role, status, petName, startDate, endDate, grade, pawlevel, helpername }) => {
+const ProfileComponent = ({ postId, petId, imageSrc, role, status, petName, startDate, endDate, grade, pawlevel, helpername,userId, helperSex }) => {
   const navigate = useNavigate();
  
   const navigateToGallery = () => {
@@ -255,10 +255,10 @@ const ProfileComponent = ({ postId, petId, imageSrc, role, status, petName, star
 
       {/* Render Modals */}
       {isUploadModalOpen && (
-        <UploadModal onClose={closeUploadModal} />
+        <UploadModal onClose={closeUploadModal} petId={petId} />
       )}
       {isProfileModalOpen && (
-        <ProfileModal onClose={closeProfileModal} startDate={startDate} endDate={endDate} imageSrc={imageSrc} />
+        <ProfileModal onClose={closeProfileModal} startDate={startDate} endDate={endDate} imageSrc={imageSrc} userId={userId} petId={petId} helperSex={helperSex}/>
       )}
       {isRatingModalOpen && (
       <RatingModal onClose={closeRatingModal} postId={postId} pickId={helpername} startDate={startDate} endDate={endDate} imageSrc={imageSrc} petName={petName} pawlevel={pawlevel} helpername={helpername} />

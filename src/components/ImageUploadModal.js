@@ -1,5 +1,6 @@
-import React, { useRef } from 'react';
+import React, { useRef, useState } from 'react';
 import styled from 'styled-components';
+import axios from 'axios';
 
 const ModalWrapper = styled.div`
   position: fixed;
@@ -61,17 +62,38 @@ const HiddenInput = styled.input`
   display: none;
 `;
 
-const UploadModal = ({ onClose }) => {
+const UploadModal = ({ onClose, petId }) => {
   const fileInputRef = useRef(null);
+  const [selectedFile, setSelectedFile] = useState(null);
 
   const handleFileChange = (e) => {
-    const selectedFile = e.target.files[0];
-    // 선택된 파일을 필요에 따라 처리
-    console.log('선택된 파일:', selectedFile);
+    const file = e.target.files[0];
+    setSelectedFile(file);
+  };
+
+  const handleUpload = async () => {
+    try {
+      const apiUrl = "http://localhost:8080/api/picture/upload";
+      const formData = new FormData();
+      formData.append("pet", JSON.stringify({ "petId": petId }));
+      formData.append("image", selectedFile);
+
+      const response = await axios.post(apiUrl, formData);
+
+      // 서버 응답 처리
+      if (response.status === 200) {
+        alert('이미지가 성공적으로 업로드되었습니다.');
+        onClose();  // 모달 닫기 또는 다음 작업 수행
+      } else {
+        alert('이미지 업로드에 실패했습니다.');
+      }
+    } catch (error) {
+      console.error('이미지 업로드 중 오류 발생:', error);
+      alert('이미지 업로드 중 오류가 발생했습니다.');
+    }
   };
 
   const handleClick = () => {
-    // 사용자 정의 버튼을 클릭하면 파일 입력 클릭 이벤트 트리거
     fileInputRef.current.click();
   };
 
@@ -82,13 +104,17 @@ const UploadModal = ({ onClose }) => {
         <ImageIcon src="/images/image_modal.png" alt="이미지" />
         <ImageText>사진과 동영상을 선택해주세요.</ImageText>
         <ImageUploadButton onClick={handleClick}>컴퓨터에서 선택</ImageUploadButton>
-        {/* 파일 선택용 숨겨진 입력 */}
         <HiddenInput
           type="file"
           accept="image/*"
           ref={fileInputRef}
           onChange={handleFileChange}
         />
+        {selectedFile && (
+          <ImageUploadButton onClick={handleUpload}>
+            업로드
+          </ImageUploadButton>
+        )}
       </Content>
     </ModalWrapper>
   );
