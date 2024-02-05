@@ -138,11 +138,11 @@ const After=styled.div`
   color: #878787;
 `;
 
-const ProfileComponent = ({ imageSrc, role, status, petName, startDate, endDate, grade, pawlevel }) => {
+const ProfileComponent = ({ postId, petId, imageSrc, role, status, petName, startDate, endDate, grade, pawlevel, helpername }) => {
   const navigate = useNavigate();
  
   const navigateToGallery = () => {
-    navigate("/gallery");
+    navigate(`/gallery/${petId}`);
   };
 
   const [isUploadModalOpen, setUploadModalOpen] = useState(false);
@@ -196,7 +196,7 @@ const ProfileComponent = ({ imageSrc, role, status, petName, startDate, endDate,
             <BuddyName>{pawlevel==='biginer' && (<PawImange src="/images/beginer_paw.png"  />)}
             {pawlevel==='normal' && (<PawImange src="/images/normal_paw.png"  />)}
             {pawlevel==='master' && (<PawImange src="/images/master_paw.png"  />)}
-            대치동 불주먹</BuddyName>
+            {helpername}</BuddyName>
           </BuddyNameContainer>
           <BuddyNameContainer>
             <BuddyRole>꼬순내</BuddyRole>
@@ -208,14 +208,14 @@ const ProfileComponent = ({ imageSrc, role, status, petName, startDate, endDate,
           </BuddyNameContainer>
           </ContentContainer>
         )}
-        {role === 'helper' && (
+        {role === 'buddyhelper' && (
           <ContentContainer>
           <BuddyNameContainer>
             <BuddyRole>버디</BuddyRole>
             <BuddyName>{pawlevel==='biginer' && (<PawImange src="/images/beginer_paw.png"  />)}
             {pawlevel==='normal' && (<PawImange src="/images/normal_paw.png"  />)}
             {pawlevel==='master' && (<PawImange src="/images/master_paw.png"  />)}
-            대치동 불주먹</BuddyName>
+            {helpername}</BuddyName>
           </BuddyNameContainer>
           <BuddyNameContainer>
             <BuddyRole>꼬순내</BuddyRole>
@@ -238,12 +238,12 @@ const ProfileComponent = ({ imageSrc, role, status, petName, startDate, endDate,
           <Button onClick={navigateToGallery}>반려 버디 갤러리</Button>
           </ButtonContainer>
         )}
-        {role === 'helper' && status === 'current' && (
+        {role === 'buddyhelper' && status === 'current' && (
           <ButtonContainer>
           <Button onClick={openUploadModal}>갤러리 업로드</Button>
           </ButtonContainer>
         )}
-        {role === 'helper' && status === 'after' && (
+        {role === 'buddyhelper' && status === 'after' && (
           <ButtonContainer>
           <Button onClick={openRatingModal}>꼬순내 평가</Button>
         </ButtonContainer>
@@ -261,7 +261,7 @@ const ProfileComponent = ({ imageSrc, role, status, petName, startDate, endDate,
         <ProfileModal onClose={closeProfileModal} startDate={startDate} endDate={endDate} imageSrc={imageSrc} />
       )}
       {isRatingModalOpen && (
-        <RatingModal onClose={closeRatingModal} startDate={startDate} endDate={endDate} imageSrc={imageSrc} petName={petName} pawlevel={pawlevel} />
+      <RatingModal onClose={closeRatingModal} postId={postId} pickId={helpername} startDate={startDate} endDate={endDate} imageSrc={imageSrc} petName={petName} pawlevel={pawlevel} helpername={helpername} />
       )}
     </Container>
   );
