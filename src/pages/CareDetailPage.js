@@ -257,7 +257,6 @@ function CareDetailPage() {
       <UnderContainer>
       <PetCardContainer>
       <ArrowContainer>
-        <Arrows src="/images/left.png" alt="left arrow" />
       </ArrowContainer>
       {applicants.map((applicant) => (
               <PetProfileCard
@@ -268,7 +267,6 @@ function CareDetailPage() {
               />
             ))}
       <ArrowContainer>
-        <Arrows src="/images/right.png" alt="right arrow" />
       </ArrowContainer>
       </PetCardContainer>
     </UnderContainer>
