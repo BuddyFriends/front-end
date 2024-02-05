@@ -122,7 +122,7 @@ function PetProfileCard({ applicant, isSelected, onClick }) {
   return (
     <PetCardArea isSelected={isSelected} onClick={onClick}>
     <CircleContainer>
-    <CircleImage src="/images/petProfile.png"></CircleImage>
+    <CircleImage src={applicant.userImage}></CircleImage>
     </CircleContainer>
     <PetPorfileTextContainer>
     <Name>{applicant.nickName}</Name><PawLevelIcon src={pawImageSrc}></PawLevelIcon> {/* 조건부 이미지 소스 */}
