@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from "react";
-import styled from "styled-components";
-import axios from "axios";
-import { useParams } from "react-router-dom";
-import ProfileCard from "../components/ProfileCard";
-import PetProfileCard from "../components/PetProfileCard";
+import React, { useState, useEffect } from 'react';
+import styled from 'styled-components';
+import axios from 'axios';
+import { useParams } from 'react-router-dom';
+import ProfileCard from '../components/ProfileCard';
+import PetProfileCard from '../components/PetProfileCard';
 
 const ProfileContainer = styled.div`
   display: flex;
@@ -18,7 +18,7 @@ const ProfileContainer = styled.div`
 const ColumnContainer = styled.div`
   text-align: center;
   margin: 10px 0px 30px 0px;
-  div {
+  div{
     display: flex;
   }
 `;
@@ -34,6 +34,7 @@ const ShortUnderline = styled.div`
   background-color: black;
   margin-left: 50px;
 `;
+
 
 const BigIcon = styled.img`
   width: 38px; /* 이미지의 크기 조절 */
@@ -53,14 +54,14 @@ const SmallIcon = styled.img`
 `;
 
 const IconTextContainer = styled.div`
-  display: flex;
-  flex-direction: row;
+  display : flex;
+  flex-direction : row;
   align-items: center;
 `;
 
 const Title = styled.h1`
   font-size: 32px;
-  font-family: "SCDream7";
+  font-family : "SCDream7";
   text-align: center;
 `;
 
@@ -68,6 +69,7 @@ const ProfileText = styled.h3`
   font-size: 24px;
   font-family: "SCDream4";
 `;
+
 
 const Textarea = styled.div`
   margin-bottom: 75px;
@@ -77,7 +79,7 @@ const Textarea = styled.div`
   width: 1000px;
   height: 500px;
   background-color: white;
-  margin-top: 50px;
+  margin-Top: 50px;
 `;
 
 const TextContent = styled.p`
@@ -100,9 +102,9 @@ const Button = styled.button`
   height: 50px;
   border: none;
   border-radius: 10px;
-  background-color: #f6bd60;
+  background-color: #F6BD60;
   box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-  font-family: "SCDream7";
+  font-family: 'SCDream7';
   color: white;
   font-size: 26px;
   cursor: pointer;
@@ -131,19 +133,22 @@ const Arrows = styled.img`
   height: 36px;
 `;
 
+
+
 function CareDetailPage() {
+
   const [selectedCardIndex, setSelectedCardIndex] = useState(null);
 
   const handleCardClick = (index) => {
     setSelectedCardIndex(index);
   };
 
-  const [currentUser, setCurrentUser] = useState(null);
+    const [currentUser, setCurrentUser] = useState(null);
 
   // 현재 로그인한 사용자 정보 가져오기
   useEffect(() => {
     // 예시: 로컬 스토리지에서 사용자 정보 가져오기
-    const userInfo = JSON.parse(localStorage.getItem("userInfo"));
+    const userInfo = JSON.parse(localStorage.getItem('userInfo'));
     if (userInfo && userInfo.userId) {
       setCurrentUser(userInfo.userId);
     }
@@ -155,29 +160,20 @@ function CareDetailPage() {
   const [isApplied, setIsApplied] = useState(false); // 신청 완료 상태 추가
   const [applicants, setApplicants] = useState([]); // 신청자 목록 상태 추가
 
+
+
   useEffect(() => {
     async function fetchDetails() {
       try {
         // 게시글 상세 정보 가져오기
-        const postResponse = await axios.get(
-          `http://localhost:8080/api/post/detail`,
-          { params: { postId } }
-        );
+        const postResponse = await axios.get(`http://localhost:8080/api/post/detail`, { params: { postId } });
         setPostDetails(postResponse.data);
 
         // 반려동물 상세 정보 가져오기
-        const petResponse = await axios.get(
-          `http://localhost:8080/api/pet/get`,
-          {
-            params: {
-              userId: postResponse.data.userId,
-              petId: postResponse.data.petId,
-            },
-          }
-        );
+        const petResponse = await axios.get(`http://localhost:8080/api/pet/get`, { params: { userId: postResponse.data.userId, petId: postResponse.data.petId } });
         setPetDetails(petResponse.data);
       } catch (error) {
-        console.error("Failed to fetch details:", error);
+        console.error('Failed to fetch details:', error);
       }
     }
 
@@ -196,16 +192,16 @@ function CareDetailPage() {
     };
 
     try {
-      await axios.post("http://localhost:8080/api/applicant/apply", applyData, {
+      await axios.post('http://localhost:8080/api/applicant/apply', applyData, {
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
         },
       });
-      alert("신청이 완료되었습니다.");
+      alert('신청이 완료되었습니다.');
       setIsApplied(true); // 신청 완료 상태 업데이트
     } catch (error) {
-      console.error("신청하기 실패:", error);
-      alert("신청하기에 실패했습니다.");
+      console.error('신청하기 실패:', error);
+      alert('신청하기에 실패했습니다.');
     }
   };
 
@@ -213,20 +209,16 @@ function CareDetailPage() {
   useEffect(() => {
     const fetchApplicants = async () => {
       try {
-        const response = await axios.get(
-          `http://localhost:8080/api/applicant/list`,
-          {
-            params: { postId: postId },
-          }
-        );
+        const response = await axios.get(`http://localhost:8080/api/applicant/list`, {
+          params: { postId: postId },
+        });
         setApplicants(response.data); // 신청자 목록 상태 업데이트
       } catch (error) {
-        console.error("신청자 정보 불러오기 실패:", error);
+        console.error('신청자 정보 불러오기 실패:', error);
       }
     };
 
-    if (isAuthor) {
-      // 게시글 작성자만 신청자 목록을 불러옴
+    if (isAuthor) { // 게시글 작성자만 신청자 목록을 불러옴
       fetchApplicants();
     }
   }, [postId, isAuthor]);
@@ -237,96 +229,105 @@ function CareDetailPage() {
   const handleApplicantSelect = (applicantId) => {
     setSelectedApplicantId(applicantId);
   };
+
   // 확정 상태를 추적하기 위한 상태 변수 추가
   const [isConfirmed, setIsConfirmed] = useState(false);
 
+
   // 확정하기 버튼 클릭 이벤트 핸들러 수정
-  const handleConfirmSelection = async () => {
-    if (!selectedApplicantId) {
-      alert("신청자를 선택해주세요.");
-      return;
-    }
+const handleConfirmSelection = async () => {
+  if (!selectedApplicantId) {
+    alert('신청자를 선택해주세요.');
+    return;
+  }
 
-    try {
-      const response = await axios.put(
-        `http://localhost:8080/api/post/select?postId=${postId}&userId=${selectedApplicantId}`,
-        {},
-        {
-          headers: { "Content-Type": "application/json" },
-        }
-      );
+  try {
+    const response = await axios.put(`http://localhost:8080/api/post/select?postId=${postId}&userId=${selectedApplicantId}`, {
+    }, {
+      headers: { 'Content-Type': 'application/json' }
+    });
 
-      if (response.status === 200) {
-        alert("확정이 완료되었습니다.");
-        setIsConfirmed(true); // 확정 상태 업데이트
-      }
-    } catch (error) {
-      console.error("확정하기 실패:", error);
-      alert("확정하기에 실패했습니다.");
+    if (response.status === 200) {
+      alert('확정이 완료되었습니다.');
+      setIsConfirmed(true); // 확정 상태 업데이트
     }
-  };
+  } catch (error) {
+    console.error('확정하기 실패:', error);
+    alert('확정하기에 실패했습니다.');
+  }
+};
+
+
+  
 
   return (
     <div>
       <ProfileContainer>
-        <ColumnContainer>
-          <IconTextContainer>
-            <BigIcon src="/images/paw.png" alt="paw" />
-            <Title>{postDetails ? postDetails.title : "Loading..."}</Title>
-          </IconTextContainer>
-          <LongUnderline />
-        </ColumnContainer>
-        {postDetails && petDetails ? (
-          <ProfileCard postDetails={postDetails} petDetails={petDetails} />
-        ) : (
-          <div>Loading...</div>
-        )}
-        <LongUnderline />
+      <ColumnContainer>
+      <IconTextContainer>
+        <BigIcon src="/images/paw.png" alt="paw" />
+        <Title>{postDetails ? postDetails.title : "Loading..."}</Title>
+      </IconTextContainer>
+      <LongUnderline/>
+      </ColumnContainer>
+      {postDetails && petDetails ? (
+        <ProfileCard postDetails={postDetails} petDetails={petDetails} />
+      ) : (
+        <div>Loading...</div>
+      )}
+      <LongUnderline/>
 
-        <Textarea>
-          <TextContent>
-            {postDetails ? postDetails.content : "Loading..."}
-          </TextContent>
-        </Textarea>
-        <LongUnderline />
-        {isAuthor && (
-          <UnderContainer>
-            <PetCardContainer>
-              <ArrowContainer></ArrowContainer>
-              {applicants.map((applicant) => (
-                <PetProfileCard
-                  key={applicant.id}
-                  applicant={applicant}
-                  isSelected={selectedApplicantId === applicant.id} // 선택 상태 prop 전달
-                  onClick={() => handleApplicantSelect(applicant.id)} // 클릭 핸들러 prop 전달
-                />
-              ))}
-              <ArrowContainer></ArrowContainer>
-            </PetCardContainer>
-          </UnderContainer>
-        )}
+      <Textarea>
+        <TextContent>{postDetails ? postDetails.content : "Loading..."}</TextContent>
+      </Textarea>
+      <LongUnderline/>
+      {isAuthor && (
+      <UnderContainer>
+      <PetCardContainer>
+      <ArrowContainer>
+      </ArrowContainer>
+      {applicants.map((applicant) => (
+              <PetProfileCard
+                key={applicant.userId}
+                applicant={applicant}
+                helperSex={applicant.helperSex}
+                isSelected={selectedApplicantId === applicant.userId} // 선택 상태 prop 전달
+                onClick={() => handleApplicantSelect(applicant.userId)} // 클릭 핸들러 prop 전달
+              />
+            ))}
+      <ArrowContainer>
+      </ArrowContainer>
+      </PetCardContainer>
+    </UnderContainer>
+    )}
 
+      {/* <ButtonContainer>
+        <Button type="submit">신청하기</Button>
+      </ButtonContainer> */}
+      {/* 버튼 텍스트 조건부 렌더링 */}
+      {/* <ButtonContainer>
+        <Button type="button">{isAuthor ? '확정하기' : '신청하기'}</Button>
+      </ButtonContainer> */}
         <ButtonContainer>
-          {isAuthor ? (
-            // 게시글 작성자인 경우
-            !isConfirmed && (
-              <Button
-                onClick={handleConfirmSelection}
-                disabled={selectedApplicantId === null}
-              >
-                확정하기
-              </Button>
-            )
-          ) : (
-            // 게시글 작성자가 아닌 경우
-            <Button onClick={handleApply} disabled={isApplied}>
-              {isApplied ? "신청완료" : "신청하기"}
-            </Button>
-          )}
+        {isAuthor ? (
+    // 게시글 작성자인 경우
+    !isConfirmed && (
+      <Button onClick={handleConfirmSelection} disabled={selectedApplicantId === null}>
+        확정하기
+      </Button>
+    )
+  ) : (
+    // 게시글 작성자가 아닌 경우
+    <Button onClick={handleApply} disabled={isApplied}>
+      {isApplied ? '신청완료' : '신청하기'}
+    </Button>
+  )}
         </ButtonContainer>
-      </ProfileContainer>
+
+    </ProfileContainer>
     </div>
-  );
+    
+  )
 }
 
-export default CareDetailPage;
+export default CareDetailPage
