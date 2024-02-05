@@ -7,6 +7,7 @@ const PageContainer = styled.div`
   background-color: #f8edeb;
   flex-direction: column;
   align-items: center;
+  min-height: 130vh;
 `;
 
 const PowContainer = styled.div`
@@ -157,7 +158,7 @@ function CurrentCheckPage() {
             endDate={log.periodEnd}
             grade={log.smell}
             pawlevel={log.grade}
-            helpername={log.pickId}
+            helpername={log.nickName}
           />
         ))}
       </InputWrapper>

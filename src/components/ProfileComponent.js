@@ -1,9 +1,10 @@
-import React, { useState } from 'react';
-import styled from 'styled-components';
-import UploadModal from './ImageUploadModal';
-import ProfileModal from './PetProfileModal';
-import RatingModal from './RatingModal';
+import React, { useState } from "react";
+import styled from "styled-components";
+import UploadModal from "./ImageUploadModal";
+import ProfileModal from "./PetProfileModal";
+import RatingModal from "./RatingModal";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 const Container = styled.div`
   display: flex;
@@ -11,11 +12,11 @@ const Container = styled.div`
   height: 300px;
   background-color: white;
   border-radius: 40px;
-  border: 3px solid #F6BD60;
+  border: 3px solid #f6bd60;
   align-items: center;
   justify-content: center;
   margin-bottom: 50px;
-  padding: 30px
+  padding: 30px;
 `;
 
 const LeftContainer = styled.div`
@@ -53,13 +54,13 @@ const Check = styled.div`
   font-size: 15px;
   margin-right: 20px;
   margin-top: 20px;
-  color: #00AB1B;
+  color: #00ab1b;
   display: flex;
 `;
 
 const CurrentText = styled.div`
   display: flex;
-  color: #FF881A;
+  color: #ff881a;
   font-size: 24px;
   margin-bottom: 20px;
 `;
@@ -96,7 +97,7 @@ const BuddyRole = styled.div`
   display: flex;
   font-size: 24px;
   font-family: "SCDream4";
-  color: #F6BD60;
+  color: #f6bd60;
   width: 120px;
 `;
 
@@ -111,7 +112,7 @@ const PawImange = styled.img`
   height: 25px;
   margin-left: 0px;
   margin-right: 10px;
-  padding-top:5px;
+  padding-top: 5px;
 `;
 
 const ButtonContainer = styled.div`
@@ -124,7 +125,7 @@ const Button = styled.button`
   align-items: center;
   justify-content: center;
   border-radius: 10px;
-  border: 3px solid #F6BD60;
+  border: 3px solid #f6bd60;
   font-size: 16px;
   cursor: pointer;
   font-family: "SCDream4";
@@ -134,13 +135,26 @@ const Button = styled.button`
   margin-right: 20px;
 `;
 
-const After=styled.div`
+const After = styled.div`
   color: #878787;
 `;
 
-const ProfileComponent = ({ postId, petId, imageSrc, role, status, petName, startDate, endDate, grade, pawlevel, helpername }) => {
+const ProfileComponent = ({
+  postId,
+  petId,
+  imageSrc,
+  role,
+  status,
+  petName,
+  startDate,
+  endDate,
+  grade,
+  pawlevel,
+  helpername,
+}) => {
   const navigate = useNavigate();
- 
+  console.log("postId", postId);
+
   const navigateToGallery = () => {
     navigate(`/gallery/${petId}`);
   };
@@ -165,8 +179,21 @@ const ProfileComponent = ({ postId, petId, imageSrc, role, status, petName, star
     setProfileModalOpen(false);
   };
 
-  const openRatingModal = () => {
-    setRatingModalOpen(true);
+  const openRatingModal = async () => {
+    const apiUrl = `http://localhost:8080/api/post/care-done?postId=${postId}`;
+    
+    try {
+      const response = await axios.put(apiUrl);
+      if (response.status === 200) {
+        setRatingModalOpen(true);
+        // window.location.reload();
+      } else {
+        alert("돌봄 완료 처리에 실패했습니다.");
+      } 
+    } catch (error) {
+      console.error(error);
+      alert("돌봄 완료 처리에 실패했습니다.");
+    };
   };
 
   const closeRatingModal = () => {
@@ -176,92 +203,126 @@ const ProfileComponent = ({ postId, petId, imageSrc, role, status, petName, star
   return (
     <Container>
       <LeftContainer>
-      <ProfileImage src={imageSrc} alt="Profile" onClick={openProfileModal} />
+        <ProfileImage src={imageSrc} alt="Profile" onClick={openProfileModal} />
         <Name>{petName}</Name>
       </LeftContainer>
       <Content>
-        {status === 'current' ? (
+        {status === "current" ? (
           <CurrentText>돌봄을 받고 있어요!</CurrentText>
         ) : (
           <CurrentText>돌봄 완료되었습니다.</CurrentText>
         )}
         <DateContainer>
           <SmallIcon src="/images/calendar_ic.png" alt="calendar" />
-          <ProfileText>{startDate} ~ {endDate}</ProfileText>
+          <ProfileText>
+            {startDate} ~ {endDate}
+          </ProfileText>
         </DateContainer>
-        {role === 'buddy' && (
+        {role === "buddy" && (
           <ContentContainer>
-          <BuddyNameContainer>
-            <BuddyRole>버디헬퍼</BuddyRole>
-            <BuddyName>{pawlevel==='biginer' && (<PawImange src="/images/beginer_paw.png"  />)}
-            {pawlevel==='normal' && (<PawImange src="/images/normal_paw.png"  />)}
-            {pawlevel==='master' && (<PawImange src="/images/master_paw.png"  />)}
-            {helpername}</BuddyName>
-          </BuddyNameContainer>
-          <BuddyNameContainer>
-            <BuddyRole>꼬순내</BuddyRole>
-            {status === 'current' ? (
-              <BuddyName>아직 꼬순내 측정이 불가합니다.</BuddyName>
+            <BuddyNameContainer>
+              <BuddyRole>버디헬퍼</BuddyRole>
+              <BuddyName>
+                {pawlevel === "비기너" && (
+                  <PawImange src="/images/beginer_paw.png" />
+                )}
+                {pawlevel === "노말" && (
+                  <PawImange src="/images/normal_paw.png" />
+                )}
+                {pawlevel === "마스터" && (
+                  <PawImange src="/images/master_paw.png" />
+                )}
+                {helpername}
+              </BuddyName>
+            </BuddyNameContainer>
+            <BuddyNameContainer>
+              <BuddyRole>꼬순내</BuddyRole>
+              {status === "current" ? (
+                <BuddyName>아직 꼬순내 측정이 불가합니다.</BuddyName>
               ) : (
-              <BuddyName>{grade}</BuddyName>
-            )}
-          </BuddyNameContainer>
+                <BuddyName>{grade}</BuddyName>
+              )}
+            </BuddyNameContainer>
           </ContentContainer>
         )}
-        {role === 'buddyhelper' && (
+        {role === "buddyhelper" && (
           <ContentContainer>
-          <BuddyNameContainer>
-            <BuddyRole>버디</BuddyRole>
-            <BuddyName>{pawlevel==='biginer' && (<PawImange src="/images/beginer_paw.png"  />)}
-            {pawlevel==='normal' && (<PawImange src="/images/normal_paw.png"  />)}
-            {pawlevel==='master' && (<PawImange src="/images/master_paw.png"  />)}
-            {helpername}</BuddyName>
-          </BuddyNameContainer>
-          <BuddyNameContainer>
-            <BuddyRole>꼬순내</BuddyRole>
-            {status === 'current' ? (
-              <BuddyName>아직 꼬순내 측정이 불가합니다.</BuddyName>
+            <BuddyNameContainer>
+              <BuddyRole>버디</BuddyRole>
+              <BuddyName>
+                {pawlevel === "비기너" && (
+                  <PawImange src="/images/beginer_paw.png" />
+                )}
+                {pawlevel === "노말" && (
+                  <PawImange src="/images/normal_paw.png" />
+                )}
+                {pawlevel === "마스터" && (
+                  <PawImange src="/images/master_paw.png" />
+                )}
+                {helpername}
+              </BuddyName>
+            </BuddyNameContainer>
+            <BuddyNameContainer>
+              <BuddyRole>꼬순내</BuddyRole>
+              {status === "current" ? (
+                <BuddyName>아직 꼬순내 측정이 불가합니다.</BuddyName>
               ) : (
-              <BuddyName>{grade}</BuddyName>
-            )}
-          </BuddyNameContainer>
+                <BuddyName>{grade}</BuddyName>
+              )}
+            </BuddyNameContainer>
           </ContentContainer>
         )}
-        {role === 'buddy' && status === 'current' && (
+        {role === "buddy" && status === "current" && (
           <ButtonContainer>
-          <Button onClick={navigateToGallery}>반려 버디 갤러리</Button>
-          <Button onClick={openRatingModal}>돌봄 완료</Button>
+            <Button onClick={navigateToGallery}>반려 버디 갤러리</Button>
+            <Button onClick={openRatingModal}>돌봄 완료</Button>
           </ButtonContainer>
         )}
-        {role === 'buddy' && status === 'after' && (
+        {role === "buddy" && status === "after" && (
           <ButtonContainer>
-          <Button onClick={navigateToGallery}>반려 버디 갤러리</Button>
+            <Button onClick={navigateToGallery}>반려 버디 갤러리</Button>
           </ButtonContainer>
         )}
-        {role === 'buddyhelper' && status === 'current' && (
+        {role === "buddyhelper" && status === "current" && (
           <ButtonContainer>
-          <Button onClick={openUploadModal}>갤러리 업로드</Button>
+            <Button onClick={openUploadModal}>갤러리 업로드</Button>
           </ButtonContainer>
         )}
-        {role === 'buddyhelper' && status === 'after' && (
+        {role === "buddyhelper" && status === "after" && (
           <ButtonContainer>
-          <Button onClick={openRatingModal}>꼬순내 평가</Button>
-        </ButtonContainer>
+            <Button onClick={openRatingModal}>꼬순내 평가</Button>
+          </ButtonContainer>
         )}
       </Content>
       <CurrentCheck>
-        <Check> {status === 'current' ? '- 진행중' : <After>- 진행 완료</After>}</Check>
+        <Check>
+          {" "}
+          {status === "current" ? "- 진행중" : <After>- 진행 완료</After>}
+        </Check>
       </CurrentCheck>
 
       {/* Render Modals */}
-      {isUploadModalOpen && (
-        <UploadModal onClose={closeUploadModal} />
-      )}
+      {isUploadModalOpen && <UploadModal onClose={closeUploadModal} />}
       {isProfileModalOpen && (
-        <ProfileModal onClose={closeProfileModal} startDate={startDate} endDate={endDate} imageSrc={imageSrc} />
+        <ProfileModal
+          onClose={closeProfileModal}
+          startDate={startDate}
+          endDate={endDate}
+          imageSrc={imageSrc}
+        />
       )}
       {isRatingModalOpen && (
-      <RatingModal onClose={closeRatingModal} postId={postId} pickId={helpername} startDate={startDate} endDate={endDate} imageSrc={imageSrc} petName={petName} pawlevel={pawlevel} helpername={helpername} />
+        <RatingModal
+          onClose={closeRatingModal}
+          postId={postId}
+          pickId={helpername}
+          startDate={startDate}
+          endDate={endDate}
+          imageSrc={imageSrc}
+          petName={petName}
+          pawlevel={pawlevel}
+          helpername={helpername}
+        />
       )}
     </Container>
   );
