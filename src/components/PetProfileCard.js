@@ -39,7 +39,7 @@ const PetPorfileTextContainer = styled.div`
   margin-bottom: 22px;
 `;
 
-const Name = styled.text`
+const Name = styled.span`
   font-size: 28px;
   font-family : "SCDream6";
   text-align: center;
@@ -52,25 +52,25 @@ const PawLevelIcon = styled.img`
   margin-left: 10px;
 `;
 
-const GenderText = styled.text`
+const GenderText = styled.span`
   font-size: 22px;
   font-family : "SCDream4";
   text-align: center;
 `;
 
-const SlashText = styled.text`
+const SlashText = styled.span`
   font-size: 22px;
   font-family : "SCDream4";
   text-align: center;
 `;
 
-const AgeText = styled.text`
+const AgeText = styled.span`
   font-size: 22px;
   font-family : "SCDream4";
   text-align: center;
 `;
 
-const AddressText = styled.text`
+const AddressText = styled.span`
   font-size: 22px;
   font-family : "SCDream4";
   text-align: center;
@@ -82,13 +82,13 @@ const PawIcon = styled.img`
   margin-right: 7px;
 `;
 
-const PawScoreText = styled.text`
+const PawScoreText = styled.span`
   font-size: 22px;
   font-family : "SCDream4";
   text-align: center;
 `;
 
-const IntroduceText = styled.text`
+const IntroduceText = styled.span`
   font-size: 18px;
   font-family : "SCDream4";
   text-align: center;
@@ -98,10 +98,26 @@ const IntroduceText = styled.text`
   padding-bottom:10px;
 `;
 
+// 성별에 따른 텍스트를 반환하는 함수, true가 '여성', false가 '남성'
+const getGenderText = (gender) => {
+  return gender ? '여성' : '남성';
+};
+
 function PetProfileCard({ applicant, isSelected, onClick }) {
   // 펫프로필 카드 배경 변경
   // 클릭 상태를 관리하기 위한 상태 변수 추가
   const [isClicked, setIsClicked] = useState(false);
+
+    // grade에 따른 이미지 경로 매핑
+    const gradeImages = {
+      "노말": "/images/normal_paw.png",
+      "비기너": "/images/beginer_paw.png",
+      "마스터": "/images/master_paw.png",
+    };
+  
+    // applicant.grade 값에 따라 이미지 경로 결정
+    const pawImageSrc = gradeImages[applicant.grade] || "/images/normal_paw.png"; // 기본값 설정
+
 
   return (
     <PetCardArea isSelected={isSelected} onClick={onClick}>
@@ -109,10 +125,10 @@ function PetProfileCard({ applicant, isSelected, onClick }) {
     <CircleImage src="/images/petProfile.png"></CircleImage>
     </CircleContainer>
     <PetPorfileTextContainer>
-    <Name>{applicant.nickName}</Name><PawLevelIcon src="/images/master_paw.png"></PawLevelIcon>
+    <Name>{applicant.nickName}</Name><PawLevelIcon src={pawImageSrc}></PawLevelIcon> {/* 조건부 이미지 소스 */}
     </PetPorfileTextContainer>
     <PetPorfileTextContainer>
-      <GenderText>여성</GenderText><SlashText>&nbsp;/&nbsp;</SlashText><AgeText>{applicant.age}대</AgeText>
+      <GenderText>{getGenderText(applicant.sex)}</GenderText><SlashText>&nbsp;/&nbsp;</SlashText><AgeText>{applicant.age}대</AgeText>
     </PetPorfileTextContainer>
     <PetPorfileTextContainer>
       <AddressText>{applicant.address}</AddressText>
