@@ -12,7 +12,7 @@ const PageContainer = styled.div`
   padding-left: 50px;
 `;
 
-const PowContaioner = styled.div`
+const PowContainer = styled.div`
   display: flex;
   margin-top: 50px;
   width: 1200px;
@@ -226,12 +226,12 @@ function CarePostPage() {
 
   return (
     <PageContainer>
-      <PowContaioner>
+      <PowContainer>
         <Paw src="/images/paw.png" alt="paw" />
         <Title>돌봄글 기본정보</Title>
-      </PowContaioner>
+      </PowContainer>
       <Underline />
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit} style={{ marginLeft: "150px" }}>
         <Box>
           <InputWrapper>
             <TextInput>돌봄 요청 기간</TextInput>
@@ -288,7 +288,7 @@ function CarePostPage() {
                 width: "900px",
                 fontSize: "20px",
                 fontFamily: "SCDream4",
-                marginBottom: "100px",
+                marginBottom: "40px",
               }}
             >
               {pets.map((pet) => (
@@ -299,10 +299,10 @@ function CarePostPage() {
             </select>
           </InputWrapper>
         </Box>
-        <PowContaioner>
+        <PowContainer>
           <Paw src="/images/paw.png" alt="paw" />
           <Title>돌봄글 내용작성</Title>
-        </PowContaioner>
+        </PowContainer>
         <Underline />
         <Box>
           <InputWrapper>

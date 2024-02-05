@@ -9,15 +9,16 @@ const InfoContainer = styled.div`
 `;
 
 const Label = styled.span`
-  font-size: 22px;
+  font-size: 24px;
   font-family: "SCDream5";
   color: #FF881A;
   margin-right: 10px;
 `;
 
 const Value = styled.span`
-  font-size: 22px;
+  font-size: 24px;
   font-family: "SCDream5";
+  margin-right: 60px;
 `;
 
 function ProfileInfo({ label, value }) {
