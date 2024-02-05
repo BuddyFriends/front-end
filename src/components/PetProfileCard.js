@@ -10,7 +10,7 @@ const PetCardArea = styled.div`
   padding: 39px 40px 28px 40px; 
   margin-top: 70px;
   border-radius: 40px;
-  background-color: ${(props) => props.isSelected ? '#f6bd60' : 'white'};
+  background-color: ${(props) => (props.isSelected ? '#F9DCC4' : 'white')}; // 조건부 배경색
   margin-left: 15px;
   margin-right: 15px;
 `;
@@ -98,15 +98,10 @@ const IntroduceText = styled.text`
   padding-bottom:10px;
 `;
 
-function PetProfileCard({ isSelected, onClick }) {
+function PetProfileCard({ applicant, isSelected, onClick }) {
   // 펫프로필 카드 배경 변경
   // 클릭 상태를 관리하기 위한 상태 변수 추가
   const [isClicked, setIsClicked] = useState(false);
-
-  // 클릭 이벤트 핸들러 함수
-  const handleClick = () => {
-    setIsClicked(!isClicked); // 클릭 상태를 토글
-  };
 
   return (
     <PetCardArea isSelected={isSelected} onClick={onClick}>
@@ -114,19 +109,19 @@ function PetProfileCard({ isSelected, onClick }) {
     <CircleImage src="/images/petProfile.png"></CircleImage>
     </CircleContainer>
     <PetPorfileTextContainer>
-    <Name>다라</Name><PawLevelIcon src="/images/master_paw.png"></PawLevelIcon>
+    <Name>{applicant.nickName}</Name><PawLevelIcon src="/images/master_paw.png"></PawLevelIcon>
     </PetPorfileTextContainer>
     <PetPorfileTextContainer>
-      <GenderText>여성</GenderText><SlashText>&nbsp;/&nbsp;</SlashText><AgeText>20대</AgeText>
+      <GenderText>여성</GenderText><SlashText>&nbsp;/&nbsp;</SlashText><AgeText>{applicant.age}대</AgeText>
     </PetPorfileTextContainer>
     <PetPorfileTextContainer>
-      <AddressText>성북구</AddressText>
+      <AddressText>{applicant.address}</AddressText>
     </PetPorfileTextContainer>
     <PetPorfileTextContainer>
-    <PawIcon src="/images/paw2.png"></PawIcon><PawScoreText>4.5점</PawScoreText>
+    <PawIcon src="/images/paw2.png"></PawIcon><PawScoreText>{applicant.score}점</PawScoreText>
     </PetPorfileTextContainer>
     <PetPorfileTextContainer>
-    <IntroduceText>포메라니안을 키우는 견주입니다.<br/>강아지 너무 좋아요</IntroduceText>
+    <IntroduceText>{applicant.intro}</IntroduceText>
     </PetPorfileTextContainer>
   </PetCardArea>
   )

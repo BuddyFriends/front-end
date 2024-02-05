@@ -131,7 +131,7 @@ const ProfileCard = ({ postDetails, petDetails }) => {
 
         <TextContainer>
           <SmallIcon src="/images/people_ic.png" alt="people" />
-          <ProfileText>여성만</ProfileText>
+          <ProfileText>{postDetails ? (postDetails.helperSex ? "남성만" : "여성만") : "로딩 중..."}</ProfileText>
         </TextContainer>
         <ShortUnderline/>
       </CardTopContainer>
