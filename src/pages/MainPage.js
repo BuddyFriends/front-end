@@ -257,7 +257,7 @@ function MainPage() {
               <OverlayText>cat</OverlayText>
             </CircleContainer>
           </CircleButton>
-          <CircleButton onClick={() => handleSpeciesClick("all")}>
+          <CircleButton onClick={() => handleSpeciesClick("etc")}>
             <CircleContainer>
               <OrangeCircle>
                 <OverlayText>other</OverlayText>

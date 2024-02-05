@@ -157,7 +157,8 @@ function CurrentCheckPage() {
             endDate={log.periodEnd}
             grade={log.smell}
             pawlevel={log.grade}
-            helpername={log.nickName}
+            helpername={log.pickId}
+            helperNickname={log.nickName}
             userId={log.userId}
             helperSex={log.helperSex}
           />

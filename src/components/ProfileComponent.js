@@ -140,7 +140,7 @@ const After = styled.div`
 `;
 
 
-const ProfileComponent = ({ postId, petId, imageSrc, role, status, petName, startDate, endDate, grade, pawlevel, helpername,userId, helperSex }) => {
+const ProfileComponent = ({ postId, petId, imageSrc, role, status, petName, startDate, endDate, grade, pawlevel, helpername,userId, helperSex,helperNickname }) => {
 
   const navigate = useNavigate();
   console.log("postId", postId);
@@ -222,7 +222,7 @@ const ProfileComponent = ({ postId, petId, imageSrc, role, status, petName, star
                 {pawlevel === "마스터" && (
                   <PawImange src="/images/master_paw.png" />
                 )}
-                {helpername}
+                {helperNickname}
               </BuddyName>
             </BuddyNameContainer>
             <BuddyNameContainer>
@@ -249,7 +249,7 @@ const ProfileComponent = ({ postId, petId, imageSrc, role, status, petName, star
                 {pawlevel === "마스터" && (
                   <PawImange src="/images/master_paw.png" />
                 )}
-                {helpername}
+                {helperNickname}
               </BuddyName>
             </BuddyNameContainer>
             <BuddyNameContainer>
