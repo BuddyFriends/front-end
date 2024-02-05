@@ -112,6 +112,19 @@ const ProfileCard = ({ postDetails, petDetails }) => {
   // 문자열 시작에 #이 오는 경우, 첫 번째 요소가 빈 문자열이 되므로 filter(Boolean)으로 빈 문자열 제거
   const tags = petDetails?.tag ? petDetails.tag.split("#").filter(Boolean) : [];
 
+  // helperSex에 따른 텍스트 반환하는 함수
+const getHelperSexText = (helperSex) => {
+  switch (helperSex) {
+    case "male":
+      return "남성만";
+    case "female":
+      return "여성만";
+    case "all":
+      return "모두 괜찮아요";
+    default:
+      return "정보 없음";
+  }
+};
 
   // 서버에서 값을 받아와서 hashtags 업데이트
   useEffect(() => {
@@ -131,7 +144,7 @@ const ProfileCard = ({ postDetails, petDetails }) => {
 
         <TextContainer>
           <SmallIcon src="/images/people_ic.png" alt="people" />
-          <ProfileText>{postDetails ? (postDetails.helperSex ? "남성만" : "여성만") : "로딩 중..."}</ProfileText>
+          <ProfileText>{postDetails ? getHelperSexText(postDetails.helperSex) : "로딩 중..."}</ProfileText>
         </TextContainer>
         <ShortUnderline/>
       </CardTopContainer>
