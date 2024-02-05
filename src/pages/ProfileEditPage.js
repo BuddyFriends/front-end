@@ -216,23 +216,39 @@ function ProfileEditPage() {
 
   const handleSubmit = async () => {
     try {
-      const response = await axios.put(
-        "http://localhost:8080/api/user/update",
-        formData,
-        {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
-
+      const submitFormData = new FormData();
+    
+      const profileData = {
+        userId: formData.userId,
+        nickName: formData.nickName,
+        address: formData.address,
+        sex: formData.sex,
+        age: formData.age,
+        intro: formData.intro,
+      };
+    
+      submitFormData.append("profile", JSON.stringify(profileData));
+    
+      if (fileInputRef.current.files[0]) {
+        submitFormData.append("image", fileInputRef.current.files[0]);
+      }
+    
+      const response = await axios.put("http://localhost:8080/api/user/update", submitFormData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+    
       if (response.status === 200) {
         console.log("Profile update success:", response.data);
-        const updatedUserInfo = {
-          ...JSON.parse(userInfo),
-          ...formData,
-        };
-        localStorage.setItem("userInfo", JSON.stringify(updatedUserInfo));
+
+      const updatedUserInfo = {
+        ...JSON.parse(localStorage.getItem("userInfo")),
+        ...response.data, 
+        userImage: response.data.userImage,
+      };
+      localStorage.setItem("userInfo", JSON.stringify(updatedUserInfo));
+
         navigate("/mypage");
       } else {
         console.error("Profile update failed:", response.status);
@@ -244,6 +260,8 @@ function ProfileEditPage() {
       }
     }
   };
+  
+  
 
   return (
     <PageContainer>
