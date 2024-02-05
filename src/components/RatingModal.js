@@ -189,7 +189,7 @@ const Button=styled.button`
 `;
 
 
-const RatingModal = ({ onClose, startDate, endDate, imageSrc, petName, pawlevel }) => {
+const RatingModal = ({ postId, pickId, onClose, startDate, endDate, imageSrc, petName, pawlevel, helpername }) => {
   const [smell, setRating] = useState(0);
 
   const rateStar = (star) => {
@@ -203,6 +203,25 @@ const RatingModal = ({ onClose, startDate, endDate, imageSrc, petName, pawlevel 
   const saveRating = async () => {
     const apiUrl = "http://localhost:8080/api/user/smell";
 
+    try {
+      const response = await axios.put(apiUrl, {
+        postId: postId,
+        userId: pickId,
+        smell: parseFloat(smell),
+      });
+
+      console.log(response.data);
+
+      if (response.status === 200) {
+        alert('꼬순내가 성공적으로 저장되었습니다!');
+        onClose();
+      } else {
+        alert('꼬순내 저장에 실패했습니다.');
+      }
+    } catch (error) {
+      console.error('꼬순내 저장 중에 오류가 발생했습니다:', error.response.data);
+      alert('꼬순내 저장 중에 오류가 발생했습니다.');
+    }
   };
 
   
@@ -231,7 +250,7 @@ const RatingModal = ({ onClose, startDate, endDate, imageSrc, petName, pawlevel 
             <BuddyName>{pawlevel==='biginer' && (<PawImange src="/images/beginer_paw.png"  />)}
             {pawlevel==='normal' && (<PawImange src="/images/normal_paw.png"  />)}
             {pawlevel==='master' && (<PawImange src="/images/master_paw.png"  />)}
-            대치동 불주먹</BuddyName>
+            {helpername}</BuddyName>
           </BuddyNameContainer>
           <BuddyNameContainer>
             <BuddyRole>꼬순내</BuddyRole>

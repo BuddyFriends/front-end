@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import ProfileComponent from '../components/ProfileComponent';
 
@@ -78,6 +78,32 @@ const CheckButton = styled.button`
 function CurrentCheckPage() {
   const [selectedCheck, setSelectedCheck] = useState('');
   const [selectedRole, setSelectedRole] = useState('buddy');
+  const [logData, setLogData] = useState([]);
+  const [status, setStatus] = useState('current'); // 'current' 또는 'after'
+  const userId = JSON.parse(localStorage.getItem("userInfo")).userId;
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const care = status === 'current' ? false : true;
+
+        const response = await fetch(`http://localhost:8080/api/post/log?care=${care}&userId=${userId}&role=${selectedRole}`);
+        const data = await response.json();
+
+        console.log(response.data);
+
+        if (Array.isArray(data)) {
+          setLogData(data);
+        } else {
+          console.error('Data is not an array:', data);
+        }
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+    };
+
+    fetchData();
+  }, [status, userId, selectedRole]);
 
   return (
     <PageContainer>
@@ -89,14 +115,14 @@ function CurrentCheckPage() {
       <InputWrapper>
         <TextInput>돌봄 진행 현황</TextInput>
         <CheckButton
-          isSelected={selectedCheck === 'currentcheck'}
-          onClick={() => setSelectedCheck('currentcheck')}
+          isSelected={status === 'current'}
+          onClick={() => setStatus('current')}
         >
           진행 중
         </CheckButton>
         <CheckButton
-          isSelected={selectedCheck === 'aftercheck'}
-          onClick={() => setSelectedCheck('aftercheck')}
+          isSelected={status === 'after'}
+          onClick={() => setStatus('after')}
         >
           진행 완료
         </CheckButton>
@@ -110,45 +136,30 @@ function CurrentCheckPage() {
           버디
         </CheckButton>
         <CheckButton
-          isSelected={selectedRole === 'helper'}
-          onClick={() => setSelectedRole('helper')}
+          isSelected={selectedRole === 'buddyhelper'}
+          onClick={() => setSelectedRole('buddyhelper')}
         >
           버디 헬퍼
         </CheckButton>
       </InputWrapper>
       <InputWrapper>
         <TextInput2>돌봄 로그 목록</TextInput2>
-        {(selectedCheck === 'currentcheck' || selectedCheck === '') && (
-          <>
-            <ProfileComponent
-              imageSrc="/images/cat.png"
-              role={selectedRole}
-              status="current"
-              petName="냥이"
-              startDate="2024-01-28"
-              endDate="2024-01-31"
-              grade="4/5"
-              pawlevel='biginer'
-            />
-            {/* Add other ProfileComponent instances here */}
-          </>
-        )}
-        
-        {(selectedCheck === 'aftercheck' || selectedCheck === '') && (
-          <>
-            <ProfileComponent
-              imageSrc='/images/dog.png'
-              role={selectedRole}
-              status="after"
-              petName="강아지"
-              startDate="2024-02-01"
-              endDate="2024-02-05"
-              grade="3/5"
-              pawlevel='master'
-            />
-            {/* Add other ProfileComponent instances here */}
-          </>
-        )}
+        {logData.map((log) => (
+          <ProfileComponent
+            postId={log.postId}
+            petId={log.petId}
+            key={log.postId}
+            imageSrc={log.petImage}
+            role={selectedRole}
+            status={status}
+            petName={log.petName}
+            startDate={log.periodStart}
+            endDate={log.periodEnd}
+            grade={log.smell}
+            pawlevel={log.grade}
+            helpername={log.pickId}
+          />
+        ))}
       </InputWrapper>
     </PageContainer>
   );
