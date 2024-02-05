@@ -153,21 +153,7 @@ function CareDetailPage() {
       '#산책하고뛰는걸좋아해요',
     ];
 
-  //   // 해시태그를 저장할 상태와, 서버에서 받아온 값을 저장할 상태
-  // const [hashtags, setHashtags] = useState(initialHashtags);
-  // const [serverHashtags, setServerHashtags] = useState([]);
-
-  // // 서버에서 값을 받아와서 hashtags 업데이트
-  // useEffect(() => {
-  //   // 서버에서 값 받아오는 로직
-  //   // 예시: fetch('서버 API 주소').then(response => response.json()).then(data => setServerHashtags(data));
-  // }, []);
-
-  const { postId } = useParams();
-  const [postDetails, setPostDetails] = useState(null);
-  const [petDetails, setPetDetails] = useState(null);
-
-  const [currentUser, setCurrentUser] = useState(null);
+    const [currentUser, setCurrentUser] = useState(null);
 
   // 현재 로그인한 사용자 정보 가져오기
   useEffect(() => {
@@ -178,15 +164,19 @@ function CareDetailPage() {
     }
   }, []);
 
+  const { postId } = useParams();
+  const [postDetails, setPostDetails] = useState(null);
+  const [petDetails, setPetDetails] = useState(null);
+
   useEffect(() => {
     async function fetchDetails() {
       try {
         // 게시글 상세 정보 가져오기
-        const postResponse = await axios.get(`http://localhost:8080/api/post/${postId}`);
+        const postResponse = await axios.get(`http://localhost:8080/api/post/detail`, { params: { postId } });
         setPostDetails(postResponse.data);
 
-        // 반려동물 상세 정보 가져오기 (postResponse.data.petId를 사용)
-        const petResponse = await axios.get(`http://localhost:8080/api/pet/get?petId=${postResponse.data.petId.petId}`);
+        // 반려동물 상세 정보 가져오기
+        const petResponse = await axios.get(`http://localhost:8080/api/pet/get`, { params: { userId: postResponse.data.userId, petId: postResponse.data.petId } });
         setPetDetails(petResponse.data);
       } catch (error) {
         console.error('Failed to fetch details:', error);
@@ -205,7 +195,7 @@ function CareDetailPage() {
       <ColumnContainer>
       <IconTextContainer>
         <BigIcon src="/images/paw.png" alt="paw" />
-        <Title>이름 돌봄 부탁드립니다.</Title>
+        <Title>{postDetails ? postDetails.title : "Loading..."}</Title>
       </IconTextContainer>
       <LongUnderline/>
       </ColumnContainer>
@@ -217,7 +207,7 @@ function CareDetailPage() {
       <LongUnderline/>
 
       <Textarea>
-        <TextContent>* 우리 뽀로리를 맡아주실 분을 구합니다.<br/>산책을 매우 좋아하고 온순한 강아지입니다.</TextContent>
+        <TextContent>{postDetails ? postDetails.content : "Loading..."}</TextContent>
       </Textarea>
       <LongUnderline/>
       {/* <UnderContainer>
