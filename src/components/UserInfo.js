@@ -100,6 +100,7 @@ function UserInfo() {
     address: "",
     smell: 0,
     intro: "",
+    userImage: "",
   });
 
   useEffect(() => {
@@ -109,6 +110,7 @@ function UserInfo() {
       setUserInfo({
         ...parsedUserInfo,
         sex: parsedUserInfo.sex ? "남성" : "여성",
+        userImage: parsedUserInfo.userImage,
       });
     }
   }, []);
@@ -131,7 +133,7 @@ function UserInfo() {
   return (
     <Box>
       <ProfileSection>
-        <CircleImage src="/images/petProfile.png" alt="Profile" />
+      <CircleImage src={userInfo.userImage} alt="Profile" />
         <InfoGrid>
           <Label>닉네임</Label>
           <Content>{userInfo.userNickName}</Content>
