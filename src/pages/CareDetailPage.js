@@ -12,7 +12,7 @@ const ProfileContainer = styled.div`
   align-items: center;
   background-color: #f8edeb;
   padding: 100px;
-  margin-bottom: 20px;
+  padding-bottom: 100px;
 `;
 
 const ColumnContainer = styled.div`
