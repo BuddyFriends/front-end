@@ -162,6 +162,7 @@ function SignUpPage() {
       sex: gender === "male"
     }));
   };
+  
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -172,7 +173,7 @@ function SignUpPage() {
       password: formData.password,
       nickName: formData.nickName,
       address: formData.address,
-      sex: formData.sex === "male",
+      sex: formData.sex,
       age: parseInt(formData.age, 10),
       intro: formData.intro,
       chat: formData.chat,
