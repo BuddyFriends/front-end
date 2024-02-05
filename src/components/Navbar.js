@@ -23,7 +23,7 @@ const NavItems = styled.div`
 `;
 
 const NavPageItem = styled.div`
-  margin: 0 12rem;
+  margin: 0 3rem;
   cursor: pointer;
   color: #000;
 `;
@@ -71,7 +71,7 @@ const Navber = () => {
           <NavPageItem>게시글 작성</NavPageItem>
         </TextLink>
         <TextLink to="/gallery/1">
-          <NavPageItem>갤러리</NavPageItem>
+          {/* <NavPageItem>갤러리</NavPageItem> */}
         </TextLink>
         <TextLink to="/check">
           <NavPageItem>돌봄 진행 현황</NavPageItem>
