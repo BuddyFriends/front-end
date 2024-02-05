@@ -107,7 +107,7 @@ const SmallIcon = styled.img`
 `;
 
 
-const ProfileCard = () => {
+const ProfileCard = ({ postDetails, petDetails }) => {
   const [petData, setPetData] = useState([]); // 반려동물 데이터를 저장할 상태
 
   // 로컬 스토리지에서 userInfo 가져오기
@@ -160,9 +160,9 @@ const ProfileCard = () => {
       <CardTopContainer>
         <TextContainer>
           <SmallIcon src="/images/calendar_ic.png" alt="calendar" />
-          <ProfileText>2024-01-28</ProfileText>
+          <ProfileText>{postDetails.periodStart}</ProfileText>
           <ProfileText>&nbsp;~&nbsp;</ProfileText>
-          <ProfileText>2024-01-31</ProfileText>
+          <ProfileText>{postDetails.periodEnd}</ProfileText>
         </TextContainer>
 
         <TextContainer>
@@ -175,15 +175,15 @@ const ProfileCard = () => {
         <CardBottomContainer>
           <ProfileCard1Container>
             <CircleContainer>
-              <CircleImage src="/images/petProfile.png" alt="CareDetailpetProfile"></CircleImage>
+              <CircleImage src={petDetails.petImage} alt={petDetails.petName}></CircleImage>
             </CircleContainer>
           </ProfileCard1Container>
 
           <ProfileCard2Container>
           <ProfileDetailGridContainer>
-            <ProfileInfo label="나이" value="3" />
-            <ProfileInfo label="품종" value="비숑" />
-            <ProfileInfo label="좋아하는 것" value="고구마" />
+            <ProfileInfo label="나이" value={petDetails.petAge} />
+            <ProfileInfo label="품종" value={petDetails.petName} />
+            <ProfileInfo label="좋아하는 것" value={petDetails.petLike} />
             <ProfileInfo label="싫어하는 것" value="꼬집기" />
             <ProfileInfo label="복용약" value="없음" />
           </ProfileDetailGridContainer>

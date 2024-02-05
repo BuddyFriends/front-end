@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import axios from 'axios';
+import { useParams } from 'react-router-dom';
 import ProfileCard from '../components/ProfileCard';
 import PetProfileCard from '../components/PetProfileCard';
 
@@ -152,15 +153,51 @@ function CareDetailPage() {
       '#산책하고뛰는걸좋아해요',
     ];
 
-    // 해시태그를 저장할 상태와, 서버에서 받아온 값을 저장할 상태
-  const [hashtags, setHashtags] = useState(initialHashtags);
-  const [serverHashtags, setServerHashtags] = useState([]);
+  //   // 해시태그를 저장할 상태와, 서버에서 받아온 값을 저장할 상태
+  // const [hashtags, setHashtags] = useState(initialHashtags);
+  // const [serverHashtags, setServerHashtags] = useState([]);
 
-  // 서버에서 값을 받아와서 hashtags 업데이트
+  // // 서버에서 값을 받아와서 hashtags 업데이트
+  // useEffect(() => {
+  //   // 서버에서 값 받아오는 로직
+  //   // 예시: fetch('서버 API 주소').then(response => response.json()).then(data => setServerHashtags(data));
+  // }, []);
+
+  const { postId } = useParams();
+  const [postDetails, setPostDetails] = useState(null);
+  const [petDetails, setPetDetails] = useState(null);
+
+  const [currentUser, setCurrentUser] = useState(null);
+
+  // 현재 로그인한 사용자 정보 가져오기
   useEffect(() => {
-    // 서버에서 값 받아오는 로직
-    // 예시: fetch('서버 API 주소').then(response => response.json()).then(data => setServerHashtags(data));
+    // 예시: 로컬 스토리지에서 사용자 정보 가져오기
+    const userInfo = JSON.parse(localStorage.getItem('userInfo'));
+    if (userInfo && userInfo.userId) {
+      setCurrentUser(userInfo.userId);
+    }
   }, []);
+
+  useEffect(() => {
+    async function fetchDetails() {
+      try {
+        // 게시글 상세 정보 가져오기
+        const postResponse = await axios.get(`http://localhost:8080/api/post/${postId}`);
+        setPostDetails(postResponse.data);
+
+        // 반려동물 상세 정보 가져오기 (postResponse.data.petId를 사용)
+        const petResponse = await axios.get(`http://localhost:8080/api/pet/get?petId=${postResponse.data.petId.petId}`);
+        setPetDetails(petResponse.data);
+      } catch (error) {
+        console.error('Failed to fetch details:', error);
+      }
+    }
+
+    fetchDetails();
+  }, [postId]);
+
+  // 게시글 작성자와 현재 로그인한 사용자가 같은지 확인
+  const isAuthor = currentUser === postDetails?.userId?.userId;
 
   return (
     <div>
@@ -172,14 +209,18 @@ function CareDetailPage() {
       </IconTextContainer>
       <LongUnderline/>
       </ColumnContainer>
-      <ProfileCard/>
+      {postDetails && petDetails ? (
+        <ProfileCard postDetails={postDetails} petDetails={petDetails} />
+      ) : (
+        <div>Loading...</div>
+      )}
       <LongUnderline/>
 
       <Textarea>
         <TextContent>* 우리 뽀로리를 맡아주실 분을 구합니다.<br/>산책을 매우 좋아하고 온순한 강아지입니다.</TextContent>
       </Textarea>
       <LongUnderline/>
-      <UnderContainer>
+      {/* <UnderContainer>
       <PetCardContainer>
         <ArrowContainer>
           <Arrows src="images/left.png"></Arrows>
@@ -197,9 +238,28 @@ function CareDetailPage() {
           <Arrows src="images/right.png"></Arrows>
         </ArrowContainer>
       </PetCardContainer>
-      </UnderContainer>
-      <ButtonContainer>
+      </UnderContainer> */}
+              {isAuthor && (
+          <UnderContainer>
+            <PetCardContainer>
+              {/* 중략 */}
+              {[0, 1, 2].map((index) => (
+                <PetProfileCard
+                  key={index}
+                  isSelected={selectedCardIndex === index}
+                  onClick={() => handleCardClick(index)}
+                />
+              ))}
+              {/* 중략 */}
+            </PetCardContainer>
+          </UnderContainer>
+        )}
+      {/* <ButtonContainer>
         <Button type="submit">신청하기</Button>
+      </ButtonContainer> */}
+      {/* 버튼 텍스트 조건부 렌더링 */}
+      <ButtonContainer>
+        <Button type="submit">{isAuthor ? '확정하기' : '신청하기'}</Button>
       </ButtonContainer>
 
     </ProfileContainer>
