@@ -31,11 +31,11 @@ const Date = styled.div`
   color: gray;
 `;
 
-function MainPostCard({ petImage, petName, periodStart, periodEnd }) {
+function MainPostCard({ postId, petImage, petName, periodStart, periodEnd }) {
   const navigate = useNavigate();
 
   const handleProfileClick = () => {
-    navigate("/caredetail");
+    navigate(`/caredetail/${postId}`);
   };
 
   return (

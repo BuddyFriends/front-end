@@ -270,6 +270,7 @@ function MainPage() {
         {posts.slice(startIndex, startIndex + 3).map((post) => (
           <MainPostCard
             key={post.postId}
+            postId={post.postId}
             petImage={post.petId.petImage}
             petName={post.petId.petName}
             periodStart={post.periodStart}

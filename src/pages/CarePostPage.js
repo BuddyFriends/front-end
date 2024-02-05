@@ -187,10 +187,10 @@ function CarePostPage() {
 
     const helperSex =
       formData.gender === "male"
-        ? false
+        ? "male"
         : formData.gender === "female"
-        ? true
-        : null;
+        ? "female"
+        : "all";
 
     const postPayload = {
       userId: userId,
