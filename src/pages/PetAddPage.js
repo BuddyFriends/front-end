@@ -176,7 +176,7 @@ function PetAddPage() {
     userId: userId,
     petName: "",
     petAge: "",
-    species: "강아지",
+    species: "dog",
     type: "",
     petLike: "",
     petDislike: "",

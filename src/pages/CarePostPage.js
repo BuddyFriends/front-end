@@ -135,12 +135,11 @@ const GenderButton = styled.button`
 function CarePostPage() {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
-    firstdate: "",
-    lastdate: "",
-    gender: "",
-    petselect: "",
-    posttitle: "",
-    postcontent: "",
+    periodsStart: "",
+    periodEnd: "",
+    petId: "",
+    title: "",
+    content: "",
   });
 
   const [selectedGender, setSelectedGender] = useState("");
@@ -155,6 +154,12 @@ function CarePostPage() {
         );
         if (response.status === 200) {
           setPets(response.data);
+          if (response.data.length === 1) {
+            setFormData((prevFormData) => ({
+              ...prevFormData,
+              petId: response.data[0].petId.toString(),
+            }));
+          }
         } else {
           console.error("Failed to fetch pets");
         }
@@ -162,12 +167,14 @@ function CarePostPage() {
         console.error("Error fetching pets:", error);
       }
     };
-
+  
     fetchPets();
-  }, []);
+  }, [userId]);
+  
 
   const handleChange = (e) => {
     const { name, value } = e.target;
+    console.log(name, value);
     setFormData({
       ...formData,
       [name]: value,
@@ -194,11 +201,11 @@ function CarePostPage() {
 
     const postPayload = {
       userId: userId,
-      petId: parseInt(formData.petselect),
-      title: formData.posttitle,
-      content: formData.postcontent,
-      periodStart: formData.firstdate,
-      periodEnd: formData.lastdate,
+      petId: parseInt(formData.petId, 10),
+      title: formData.title,
+      content: formData.content,
+      periodStart: formData.periodsStart,
+      periodEnd: formData.periodEnd,
       helperSex: helperSex,
     };
 
@@ -238,15 +245,15 @@ function CarePostPage() {
             <DateSelect>
               <InputDate
                 type="date"
-                name="firstdate"
-                value={formData.firstdate}
+                name="periodsStart"
+                value={formData.periodsStart}
                 onChange={handleChange}
               />
               <Inputa>~</Inputa>
               <InputDate
                 type="date"
-                name="lastdate"
-                value={formData.lastdate}
+                name="periodEnd"
+                value={formData.periodEnd}
                 onChange={handleChange}
               />
             </DateSelect>
@@ -278,8 +285,8 @@ function CarePostPage() {
           <InputWrapper>
             <TextInput>반려 동물 선택</TextInput>
             <select
-              name="petselect"
-              value={formData.petselect}
+              name="petId"
+              value={formData.petId}
               onChange={handleChange}
               style={{
                 padding: "10px",
@@ -309,9 +316,9 @@ function CarePostPage() {
             <TextInput>돌봄글 제목</TextInput>
             <Input
               type="text"
-              name="posttitle"
+              name="title"
               placeholder="제목을 입력해주세요."
-              value={formData.posttitle}
+              value={formData.title}
               onChange={handleChange}
             />
           </InputWrapper>
@@ -319,9 +326,9 @@ function CarePostPage() {
             <TextInput>돌봄글 내용</TextInput>
             <Textarea
               type="text"
-              name="postcontent"
+              name="content"
               placeholder="내용을 입력해주세요."
-              value={formData.postcontent}
+              value={formData.content}
               onChange={handleChange}
             />
           </InputWrapper>
