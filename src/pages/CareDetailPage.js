@@ -230,34 +230,6 @@ function CareDetailPage() {
     setSelectedApplicantId(applicantId);
   };
 
-  // 확정 상태를 추적하기 위한 상태 변수 추가
-  const [isConfirmed, setIsConfirmed] = useState(false);
-
-
-  // 확정하기 버튼 클릭 이벤트 핸들러 수정
-const handleConfirmSelection = async () => {
-  if (!selectedApplicantId) {
-    alert('신청자를 선택해주세요.');
-    return;
-  }
-
-  try {
-    const response = await axios.put(`http://localhost:8080/api/post/select?postId=${postId}&userId=${selectedApplicantId}`, {
-    }, {
-      headers: { 'Content-Type': 'application/json' }
-    });
-
-    if (response.status === 200) {
-      alert('확정이 완료되었습니다.');
-      setIsConfirmed(true); // 확정 상태 업데이트
-    }
-  } catch (error) {
-    console.error('확정하기 실패:', error);
-    alert('확정하기에 실패했습니다.');
-  }
-};
-
-
   
 
   return (
@@ -289,11 +261,10 @@ const handleConfirmSelection = async () => {
       </ArrowContainer>
       {applicants.map((applicant) => (
               <PetProfileCard
-                key={applicant.userId}
+                key={applicant.id}
                 applicant={applicant}
-                helperSex={applicant.helperSex}
-                isSelected={selectedApplicantId === applicant.userId} // 선택 상태 prop 전달
-                onClick={() => handleApplicantSelect(applicant.userId)} // 클릭 핸들러 prop 전달
+                isSelected={selectedApplicantId === applicant.id} // 선택 상태 prop 전달
+                onClick={() => handleApplicantSelect(applicant.id)} // 클릭 핸들러 prop 전달
               />
             ))}
       <ArrowContainer>
@@ -310,20 +281,14 @@ const handleConfirmSelection = async () => {
       {/* <ButtonContainer>
         <Button type="button">{isAuthor ? '확정하기' : '신청하기'}</Button>
       </ButtonContainer> */}
-        <ButtonContainer>
-        {isAuthor ? (
-    // 게시글 작성자인 경우
-    !isConfirmed && (
-      <Button onClick={handleConfirmSelection} disabled={selectedApplicantId === null}>
-        확정하기
-      </Button>
-    )
-  ) : (
-    // 게시글 작성자가 아닌 경우
-    <Button onClick={handleApply} disabled={isApplied}>
-      {isApplied ? '신청완료' : '신청하기'}
-    </Button>
-  )}
+              <ButtonContainer>
+          <Button
+            type="button"
+            onClick={!isAuthor && !isApplied ? handleApply : undefined}
+            disabled={isApplied} // 신청 완료 상태에서 버튼 비활성화
+          >
+            {isAuthor ? '확정하기' : isApplied ? '신청완료' : '신청하기'}
+          </Button>
         </ButtonContainer>
 
     </ProfileContainer>
