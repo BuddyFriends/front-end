@@ -91,7 +91,6 @@ function CurrentCheckPage() {
         const response = await fetch(`http://localhost:8080/api/post/log?care=${care}&userId=${userId}&role=${selectedRole}`);
         const data = await response.json();
 
-        console.log(response.data);
 
         if (Array.isArray(data)) {
           setLogData(data);
@@ -159,6 +158,8 @@ function CurrentCheckPage() {
             grade={log.smell}
             pawlevel={log.grade}
             helpername={log.nickName}
+            userId={log.userId}
+            helperSex={log.helperSex}
           />
         ))}
       </InputWrapper>

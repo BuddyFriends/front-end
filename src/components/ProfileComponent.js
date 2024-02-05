@@ -139,19 +139,9 @@ const After = styled.div`
   color: #878787;
 `;
 
-const ProfileComponent = ({
-  postId,
-  petId,
-  imageSrc,
-  role,
-  status,
-  petName,
-  startDate,
-  endDate,
-  grade,
-  pawlevel,
-  helpername,
-}) => {
+
+const ProfileComponent = ({ postId, petId, imageSrc, role, status, petName, startDate, endDate, grade, pawlevel, helpername,userId, helperSex }) => {
+
   const navigate = useNavigate();
   console.log("postId", postId);
 
@@ -302,14 +292,14 @@ const ProfileComponent = ({
       </CurrentCheck>
 
       {/* Render Modals */}
-      {isUploadModalOpen && <UploadModal onClose={closeUploadModal} />}
+
+      {isUploadModalOpen && (
+        <UploadModal onClose={closeUploadModal} petId={petId} />
+      )}
       {isProfileModalOpen && (
-        <ProfileModal
-          onClose={closeProfileModal}
-          startDate={startDate}
-          endDate={endDate}
-          imageSrc={imageSrc}
-        />
+        <ProfileModal onClose={closeProfileModal} startDate={startDate} endDate={endDate} imageSrc={imageSrc} userId={userId} petId={petId} helperSex={helperSex}/>
+
+      
       )}
       {isRatingModalOpen && (
         <RatingModal
